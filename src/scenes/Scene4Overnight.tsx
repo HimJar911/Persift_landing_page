@@ -155,7 +155,6 @@ export function Scene4Overnight() {
   const isntOpacity   = useTransform(p, [0.18, 0.36], [0, 1])
   const isntY         = useTransform(p, [0.18, 0.36], [14, 0])
 
-  // Only show companies that have been found; newest first (highest foundIdx on top)
   const visible = COMPANIES
     .filter(c => clockIndex >= c.foundIdx)
     .slice()
@@ -223,7 +222,6 @@ export function Scene4Overnight() {
         <ExtensionPopup status="applying" statusLabel="Applying" pulse toggleOn footnote="Auto-apply" width={500}>
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
 
-            {/* Header row */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
                 Tonight · {TIMES[clockIndex]}
@@ -238,7 +236,6 @@ export function Scene4Overnight() {
               </div>
             </div>
 
-            {/* Company rows — newest on top, completed sink to bottom */}
             <AnimatePresence initial={false}>
               {visible.map((c) => (
                 <CompanyRow key={c.name} c={c} clockIndex={clockIndex} />

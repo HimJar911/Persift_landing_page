@@ -89,9 +89,8 @@ export function SceneHero() {
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.3vw" }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "1.35vw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
-                Enter:
+                $ persift --start
               </span>
-              <span style={{ display: "inline-block", width: "0.14vw", height: "1.4vw", minWidth: "1px", minHeight: "8px", background: "#f0a341", boxShadow: "0 0 6px rgba(240,163,65,0.9)", borderRadius: 1, animation: "blink 1.1s step-start infinite" }} />
             </div>
           </motion.div>
         </motion.div>

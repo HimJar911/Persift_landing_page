@@ -247,9 +247,6 @@ export function Scene6Analytics() {
         </BrowserWindow>
       </motion.div>
 
-      <CopyLine from={0.55} to={0.8} size={16}>
-        Finally know what&apos;s actually working.
-      </CopyLine>
     </div>
   )
 }

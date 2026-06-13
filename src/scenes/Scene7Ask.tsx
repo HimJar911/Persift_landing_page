@@ -1,16 +1,17 @@
 import { useState } from "react"
 import { Wordmark } from "../components/Brand"
 
-type Status = "idle" | "loading" | "success" | "error"
+type Status = "idle" | "loading" | "success" | "error" | "already"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const LAUNCHLIST_URL = "https://getlaunchlist.com/s/vvpphU"
+const LS_KEY = "persift_waitlist_email"
 
 export function Scene7Ask() {
   const [email, setEmail] = useState("")
-  const [status, setStatus] = useState<Status>("idle")
+  const [status, setStatus] = useState<Status>(() =>
+    localStorage.getItem(LS_KEY) ? "already" : "idle"
+  )
   const [errorMsg, setErrorMsg] = useState("")
-  const [referralUrl, setReferralUrl] = useState("")
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -22,15 +23,13 @@ export function Scene7Ask() {
     setStatus("loading")
     setErrorMsg("")
     try {
-      const body = new URLSearchParams({ email: email.trim() })
-      const res = await fetch(LAUNCHLIST_URL, {
+      const res = await fetch("/api/waitlist", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
       })
       if (!res.ok) throw new Error(`${res.status}`)
-      // capture referral URL from final redirected response for optional future use
-      setReferralUrl(res.url)
+      localStorage.setItem(LS_KEY, email.trim())
       setStatus("success")
     } catch {
       setErrorMsg("Something went wrong. Please try again.")
@@ -87,7 +86,7 @@ export function Scene7Ask() {
         width: "100%",
         maxWidth: 420,
       }}>
-        {status === "success" ? (
+        {(status === "success" || status === "already") ? (
           <div style={{
             padding: "14px 22px",
             borderRadius: 12,
@@ -97,9 +96,11 @@ export function Scene7Ask() {
             fontSize: 14.5,
             fontWeight: 500,
             textAlign: "center",
+            lineHeight: 1.5,
           }}>
-            You&apos;re on the list — check your email to confirm.
-            {referralUrl && <span data-referral={referralUrl} />}
+            {status === "success"
+              ? "You're on the list. We'll reach out when Persift is ready."
+              : "You're already on the list. We'll reach out when Persift is ready."}
           </div>
         ) : (
           <>
@@ -159,6 +160,9 @@ export function Scene7Ask() {
           </>
         )}
         <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Private beta · August 2026</span>
+        <span style={{ fontSize: 11.5, color: "var(--ink-faint)", textAlign: "center" }}>
+          We'll only reach out when Persift launches. No spam.
+        </span>
       </div>
 
       <div style={{ position: "absolute", bottom: 26, left: 0, right: 0, textAlign: "center" }}>

@@ -13,8 +13,9 @@ import { Scene6Analytics } from "./scenes/Scene6Analytics"
 import { Scene7Ask } from "./scenes/Scene7Ask"
 
 const HEADER_H = 48
-const TOTAL_VH = 300 + 150 + 200 + 350 + 400 + 300 + 150 + 150 + 150
+const TOTAL_VH = 300 + 150 + 200 + 350 + 400 + 300 + 100 + 100 + 150
 const LAUNCH_START_VH = TOTAL_VH - 150
+
 
 function scrollToCta() {
   window.scrollTo({ top: (LAUNCH_START_VH / 100) * window.innerHeight, behavior: "smooth" })
@@ -26,6 +27,7 @@ export default function App() {
   const { scrollYProgress } = useScroll()
   const progress = useMotionValue(0)
   useEffect(() => scrollYProgress.on("change", (v) => progress.set(v)), [scrollYProgress])
+
   const barScale = useTransform(progress, [0, 1], [0, 1])
   const scrollHintOpacity = useTransform(progress, [0, 0.03, 0.06, 0.92, 1], [1, 0, 1, 1, 0])
 
@@ -129,8 +131,8 @@ export default function App() {
           { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "350vh", children: <Scene2Setup /> },
           { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "400vh", children: <Scene3Machine /> },
           { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "300vh", children: <Scene4Overnight /> },
-          { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "150vh", children: <Scene5Morning /> },
-          { label: "Analytics", description: "See what's working.",                     scrollHeight: "150vh", children: <Scene6Analytics /> },
+          { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "100vh", children: <Scene5Morning /> },
+          { label: "Analytics", description: "See what's working.",                     scrollHeight: "100vh", children: <Scene6Analytics /> },
           { label: "Launch",    description: "Stop applying. Start interviewing.",      scrollHeight: "150vh", children: <div id="section-cta" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Scene7Ask /></div> },
         ]}
       />

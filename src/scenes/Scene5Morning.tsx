@@ -234,9 +234,6 @@ export function Scene5Morning() {
         </BrowserWindow>
       </motion.div>
 
-      <CopyLine from={0.55} to={0.8} size={16}>
-        This is what Thursday morning looks like now.
-      </CopyLine>
     </div>
   )
 }
