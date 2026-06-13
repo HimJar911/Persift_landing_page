@@ -302,7 +302,7 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
         ) : null)}
 
         {/* Nav + content column */}
-        <div style={{ position: "absolute", inset: 0, display: "flex" }}>
+        <div style={{ position: "absolute", inset: 0, display: "flex", pointerEvents: "none" }}>
           <motion.div
             style={{
               flexShrink: 0,
@@ -315,6 +315,7 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
               opacity: navOpacity,
               x: navX,
               marginLeft: navX,
+              pointerEvents: "auto",
             }}
           >
             {steps.map((step, i) => step.label ? (
@@ -334,7 +335,7 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
             ) : null)}
           </motion.div>
 
-          <div style={{ flex: 1, position: "relative", minWidth: 0, overflow: "hidden" }}>
+          <div style={{ flex: 1, position: "relative", minWidth: 0, overflow: "hidden", pointerEvents: "auto" }}>
             {steps.map((step, i) => !step.fullBleed ? (
               <SceneSlot
                 key={step.label || `scene-${i}`}

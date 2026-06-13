@@ -114,6 +114,7 @@ export function SceneMeetPersift() {
           background: "linear-gradient(180deg, var(--amber-soft), var(--amber))",
           boxShadow: "0 4px 18px rgba(240,163,65,0.35)",
           position: "relative",
+          pointerEvents: "auto",
         }}
         onClick={() => {
           const totalVh = 300 + 150 + 200 + 350 + 400 + 300 + 150 + 150 + 150
