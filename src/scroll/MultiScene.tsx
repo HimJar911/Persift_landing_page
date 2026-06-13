@@ -285,22 +285,6 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
           background: "var(--bg)",
         }}
       >
-        {/* Full-bleed layers (hero, bridge) — rendered behind nav, no flex offset */}
-        {steps.map((step, i) => step.fullBleed ? (
-          <SceneSlot
-            key={`fb-${i}`}
-            progress={progress}
-            bandStart={bands[i].start}
-            bandEnd={bands[i].end}
-            isFirst={i === 0}
-            isLast={false}
-            fullBleed
-            noSlide={step.noSlide}
-          >
-            {step.children}
-          </SceneSlot>
-        ) : null)}
-
         {/* Nav + content column */}
         <div style={{ position: "absolute", inset: 0, display: "flex", pointerEvents: "none" }}>
           <motion.div
@@ -350,6 +334,22 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
             ) : null)}
           </div>
         </div>
+
+        {/* Full-bleed layers — rendered on top so their buttons are clickable */}
+        {steps.map((step, i) => step.fullBleed ? (
+          <SceneSlot
+            key={`fb-${i}`}
+            progress={progress}
+            bandStart={bands[i].start}
+            bandEnd={bands[i].end}
+            isFirst={i === 0}
+            isLast={false}
+            fullBleed
+            noSlide={step.noSlide}
+          >
+            {step.children}
+          </SceneSlot>
+        ) : null)}
       </div>
     </div>
   )

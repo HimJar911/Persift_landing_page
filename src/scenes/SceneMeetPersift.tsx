@@ -117,7 +117,7 @@ export function SceneMeetPersift() {
           pointerEvents: "auto",
         }}
         onClick={() => {
-          const totalVh = 300 + 150 + 200 + 350 + 400 + 300 + 150 + 150 + 150
+          const totalVh = 300 + 150 + 200 + 350 + 400 + 300 + 100 + 100 + 150
           window.scrollTo({ top: ((totalVh - 150) / 100) * window.innerHeight, behavior: "smooth" })
         }}
       >
