@@ -4,6 +4,7 @@ import { Wordmark } from "../components/Brand"
 type Status = "idle" | "loading" | "success" | "error" | "already"
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const LAUNCHLIST_URL = "https://getlaunchlist.com/s/vvpphU"
 const LS_KEY = "persift_waitlist_email"
 
 export function Scene7Ask() {
@@ -23,12 +24,19 @@ export function Scene7Ask() {
     setStatus("loading")
     setErrorMsg("")
     try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      })
-      if (!res.ok) throw new Error(`${res.status}`)
+      const [llRes] = await Promise.all([
+        fetch(LAUNCHLIST_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ email: email.trim() }).toString(),
+        }),
+        fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim() }),
+        }),
+      ])
+      if (!llRes.ok) throw new Error(`${llRes.status}`)
       localStorage.setItem(LS_KEY, email.trim())
       setStatus("success")
     } catch {

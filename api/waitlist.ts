@@ -1,7 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 import { Resend } from "resend"
 
-const LAUNCHLIST_URL = "https://getlaunchlist.com/s/vvpphU"
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -11,14 +10,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Invalid email" })
   }
-
-  // Submit to LaunchList
-  const llRes = await fetch(LAUNCHLIST_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ email }).toString(),
-  })
-  if (!llRes.ok) return res.status(502).json({ error: "LaunchList error" })
 
   // Send confirmation email via Resend
   await resend.emails.send({
