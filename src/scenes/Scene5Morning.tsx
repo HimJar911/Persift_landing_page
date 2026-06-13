@@ -10,7 +10,7 @@ function StatCard({ value, label, accent }: { value: string; label: string; acce
       style={{
         flex: 1,
         minWidth: 0,
-        padding: "10px 12px",
+        padding: "8px 12px",
         borderRadius: 12,
         background: "rgba(255,255,255,0.02)",
         border: "1px solid var(--line)",
@@ -22,7 +22,7 @@ function StatCard({ value, label, accent }: { value: string; label: string; acce
       <span
         style={{
           fontFamily: "var(--font-serif)",
-          fontSize: 28,
+          fontSize: 24,
           fontWeight: 600,
           lineHeight: 1,
           color: accent ? "var(--amber)" : "var(--ink)",
@@ -36,9 +36,9 @@ function StatCard({ value, label, accent }: { value: string; label: string; acce
 }
 
 const QUEUE = [
-  { company: "Figma", role: "Product Design Intern", match: 88, eta: "Applying in 4 min" },
-  { company: "Notion", role: "SWE Intern", match: 85, eta: "Applying in 8 min" },
-  { company: "Ramp", role: "Engineering Intern", match: 81, eta: "Applying in 12 min" },
+  { company: "Figma", role: "Product Design Intern", match: 88, eta: "4 min" },
+  { company: "Notion", role: "SWE Intern", match: 85, eta: "8 min" },
+  { company: "Ramp", role: "Engineering Intern", match: 81, eta: "12 min" },
 ]
 
 function CompanyBadge({ name }: { name: string }) {
@@ -67,10 +67,10 @@ function CompanyBadge({ name }: { name: string }) {
 
 function UpNext() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <span
         style={{
-          fontSize: 11,
+          fontSize: 10.5,
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           color: "var(--ink-mute)",
@@ -92,39 +92,38 @@ function UpNext() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 12,
-              padding: "8px 14px",
+              gap: 10,
+              padding: "7px 12px",
               borderTop: i === 0 ? "none" : "1px solid var(--line)",
             }}
           >
             <CompanyBadge name={q.company} />
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{q.company}</div>
-              <div style={{ fontSize: 12, color: "var(--ink-mute)" }}>{q.role}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{q.company}</div>
+              <div style={{ fontSize: 11.5, color: "var(--ink-mute)" }}>{q.role}</div>
             </div>
-            <span
-              style={{
-                fontSize: 12,
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+              <span style={{
+                fontSize: 11.5,
                 fontWeight: 600,
                 fontVariantNumeric: "tabular-nums",
                 color: q.match >= 90 ? "var(--green)" : "var(--amber-soft)",
-                flexShrink: 0,
-              }}
-            >
-              {q.match}% match
-            </span>
-            <span
-              style={{
+                background: q.match >= 90 ? "rgba(95,208,127,0.08)" : "rgba(240,163,65,0.08)",
+                border: `1px solid ${q.match >= 90 ? "rgba(95,208,127,0.2)" : "rgba(240,163,65,0.2)"}`,
+                borderRadius: 999,
+                padding: "2px 8px",
+              }}>
+                {q.match}%
+              </span>
+              <span style={{
                 fontSize: 11.5,
-                color: "var(--ink-soft)",
+                color: "var(--ink-mute)",
                 fontVariantNumeric: "tabular-nums",
-                flexShrink: 0,
-                width: 96,
-                textAlign: "right",
-              }}
-            >
-              {q.eta}
-            </span>
+                whiteSpace: "nowrap",
+              }}>
+                applying in {q.eta}
+              </span>
+            </div>
           </div>
         ))}
       </div>
@@ -143,31 +142,31 @@ export function Scene5Morning() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "flex-start",
-        gap: 26,
-        padding: "24px 24px 0",
+        justifyContent: "center",
+        gap: 12,
+        padding: "12px 24px",
         width: "100%",
         height: "100%",
       }}
     >
       <motion.div style={{ opacity: headOpacity, y: headY, width: "100%", display: "flex", justifyContent: "center" }}>
         <BrowserWindow url="app.persift.app/dashboard" width="90vw" maxWidth={1040}>
-          <DashboardShell activeTab="overview" tone="dawn" embedded maxHeight="calc(100vh - 200px)">
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <DashboardShell activeTab="overview" tone="dawn" embedded>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div>
               <h3
                 style={{
                   margin: 0,
                   fontFamily: "var(--font-serif)",
                   fontWeight: 500,
-                  fontSize: 30,
+                  fontSize: 26,
                   letterSpacing: "-0.02em",
                   color: "var(--ink)",
                 }}
               >
                 Good morning.
               </h3>
-              <p style={{ margin: "6px 0 0", fontSize: 14.5, color: "var(--ink-soft)" }}>
+              <p style={{ margin: "4px 0 0", fontSize: 13.5, color: "var(--ink-soft)" }}>
                 You applied to <strong style={{ color: "var(--amber-soft)", fontWeight: 600 }}>8 jobs</strong>{" "}
                 while you were sleeping.
               </p>
@@ -187,7 +186,7 @@ export function Scene5Morning() {
                 display: "flex",
                 alignItems: "center",
                 gap: 13,
-                padding: "10px 15px",
+                padding: "8px 13px",
                 borderRadius: 13,
                 background: "linear-gradient(90deg, rgba(240,163,65,0.14), rgba(240,163,65,0.04))",
                 border: "1px solid rgba(240,163,65,0.32)",

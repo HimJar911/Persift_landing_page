@@ -42,7 +42,7 @@ export function DashboardShell({ activeTab, children, tone = "day", width = 720,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "13px 18px",
+          padding: "10px 18px",
           borderBottom: "1px solid var(--line)",
           background:
             tone === "dawn"
@@ -91,7 +91,7 @@ export function DashboardShell({ activeTab, children, tone = "day", width = 720,
       </div>
 
       {/* body */}
-      <div style={{ padding: embedded ? "20px 28px 20px" : "22px 24px 26px" }}>{children}</div>
+      <div style={{ padding: embedded ? "14px 22px 16px" : "22px 24px 26px" }}>{children}</div>
     </div>
   )
 }

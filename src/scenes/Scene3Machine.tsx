@@ -230,19 +230,19 @@ function TailoringPanel({ company }: { company: Company }) {
 
 function FilledField({ label, value, done, accent }: { label: string; value: string; done: boolean; accent: string }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      <span style={{ fontSize: 10.5, color: "#3a4a40", fontWeight: 500 }}>{label}</span>
+    <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <span style={{ fontSize: 10, color: "#3a4a40", fontWeight: 500 }}>{label}</span>
       <div
         style={{
-          height: 32,
-          borderRadius: 6,
+          height: 27,
+          borderRadius: 5,
           background: "#fff",
           border: "1px solid #d4ddd6",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 11px",
-          fontSize: 12,
+          padding: "0 9px",
+          fontSize: 11.5,
           color: "#2f3a33",
         }}
       >
@@ -301,10 +301,10 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: company.ats === "ashby" ? 14 : 11,
+          gap: 9,
           background: dark ? style.surfaceBg : "transparent",
           margin: -12,
-          padding: 14,
+          padding: 11,
           borderRadius: 8,
         }}
       >
@@ -352,19 +352,19 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
             <FilledField label="Email" value="jordan.reyes@berkeley.edu" done accent={style.accent} />
 
             {/* resume */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <span style={{ fontSize: 10.5, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>Resume / CV</span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <span style={{ fontSize: 10, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>Resume / CV</span>
               <div
                 style={{
-                  height: 32,
-                  borderRadius: 6,
+                  height: 27,
+                  borderRadius: 5,
                   background: dark ? "#211a13" : "#eef5f0",
                   border: `1px solid ${fieldBorder}`,
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  padding: "0 11px",
-                  fontSize: 12,
+                  padding: "0 9px",
+                  fontSize: 11.5,
                   color: ink,
                 }}
               >
@@ -389,20 +389,20 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
             <FilledField label="Portfolio / GitHub" value="github.com/jordanreyes" done accent={style.accent} />
 
             {/* the essay being typed right now */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <span style={{ fontSize: 10.5, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <span style={{ fontSize: 10, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>
                 Why do you want to work here?
               </span>
               <div
                 style={{
-                  minHeight: 78,
-                  borderRadius: 6,
+                  minHeight: 54,
+                  borderRadius: 5,
                   background: dark ? "#211a13" : "#fff",
                   border: `1.5px solid ${style.accent}`,
                   boxShadow: `0 0 0 3px ${style.accent}1f`,
-                  padding: "8px 11px",
-                  fontSize: 12,
-                  lineHeight: 1.5,
+                  padding: "6px 9px",
+                  fontSize: 11.5,
+                  lineHeight: 1.45,
                   color: ink,
                 }}
               >
@@ -422,20 +422,15 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
             </div>
 
             {/* fill progress */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 2 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, color: inkMute }}>
-                <span>Auto-filling fields…</span>
-              </div>
-              <div style={{ height: 5, borderRadius: 999, background: dark ? "#2e261d" : "#e4ebe5", overflow: "hidden" }}>
-                <motion.div
-                  style={{
-                    height: "100%",
-                    width: barWidth,
-                    borderRadius: 999,
-                    background: `linear-gradient(90deg, ${style.accent}, ${style.accent})`,
-                  }}
-                />
-              </div>
+            <div style={{ height: 4, borderRadius: 999, background: dark ? "#2e261d" : "#e4ebe5", overflow: "hidden" }}>
+              <motion.div
+                style={{
+                  height: "100%",
+                  width: barWidth,
+                  borderRadius: 999,
+                  background: `linear-gradient(90deg, ${style.accent}, ${style.accent})`,
+                }}
+              />
             </div>
           </>
         )}
@@ -548,11 +543,11 @@ export function Scene3Machine() {
   const frac = useTransform(rawIndex, (v) => v - Math.floor(v))
   const [phase, setPhase] = useState<"tailoring" | "filling">("tailoring")
   useMotionValueEvent(frac, "change", (f) => {
-    const next = f < 0.15 ? "tailoring" : "filling"
+    const next = f < 0.35 ? "tailoring" : "filling"
     if (next !== phase) setPhase(next)
   })
-  // fillFrac: 0→1 during the filling phase (85% of each slot)
-  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.15) / 0.85)))
+  // fillFrac: 0→1 during the filling phase (65% of each slot)
+  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.35) / 0.65)))
   const fill = useTransform(fillFrac, (f) => `${Math.round(f * 100)}%`)
 
   const active = PIPELINE[current]

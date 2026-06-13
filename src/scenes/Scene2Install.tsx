@@ -397,11 +397,32 @@ export function Scene2Install() {
             </div>
           </div>
 
-          {/* meta pills */}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <StorePill>Finds roles before LinkedIn</StorePill>
-            <StorePill>Tailors resume per company</StorePill>
-            <StorePill>Tracks everything automatically</StorePill>
+          {/* coming soon notice */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "7px 14px",
+            borderRadius: 8,
+            background: "rgba(240,163,65,0.07)",
+            border: "1px solid rgba(240,163,65,0.2)",
+            alignSelf: "flex-start",
+          }}>
+            <span style={{
+              width: 6, height: 6, borderRadius: "50%",
+              background: "#f0a341",
+              flexShrink: 0,
+              boxShadow: "0 0 6px rgba(240,163,65,0.6)",
+            }} />
+            <span style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 12.5,
+              fontWeight: 500,
+              color: "#c8873a",
+              letterSpacing: "0.01em",
+            }}>
+              Private beta · August 2026
+            </span>
           </div>
 
           {/* screenshots — real product UI */}

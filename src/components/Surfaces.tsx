@@ -64,7 +64,7 @@ export function SurfaceFrame({
           {url}
         </span>
       </div>
-      <div style={{ padding: 12 }}>{children}</div>
+      <div style={{ padding: 10 }}>{children}</div>
     </div>
   )
 }

@@ -48,7 +48,7 @@ function TimelineChart() {
         </span>
         <span style={{ fontSize: 11.5, color: "var(--amber-soft)", fontWeight: 600 }}>+38% vs last month</span>
       </div>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 100 }}>
+      <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 80 }}>
         {BARS.map((b, i) => (
           <ChartBar key={i} value={b} index={i} grow={grow} highlight={i >= BARS.length - 4} />
         ))}
@@ -73,7 +73,7 @@ function MiniStat({
       style={{
         flex: 1,
         minWidth: 0,
-        padding: "13px 14px",
+        padding: "10px 12px",
         borderRadius: 12,
         background: "rgba(255,255,255,0.02)",
         border: "1px solid var(--line)",
@@ -88,7 +88,7 @@ function MiniStat({
       <span
         style={{
           fontFamily: "var(--font-serif)",
-          fontSize: 21,
+          fontSize: 18,
           fontWeight: 600,
           color: accent ? "var(--amber)" : "var(--ink)",
           lineHeight: 1.1,
@@ -151,7 +151,7 @@ function ApplicationsTable() {
             display: "grid",
             gridTemplateColumns: cols,
             gap: isMobile ? 8 : 12,
-            padding: "9px 14px",
+            padding: "7px 14px",
             borderBottom: "1px solid var(--line)",
             fontSize: 10.5,
             letterSpacing: "0.06em",
@@ -173,7 +173,7 @@ function ApplicationsTable() {
               gridTemplateColumns: cols,
               gap: isMobile ? 8 : 12,
               alignItems: "center",
-              padding: "10px 14px",
+              padding: "7px 14px",
               borderTop: i === 0 ? "none" : "1px solid rgba(255,255,255,0.04)",
               fontSize: 12.5,
             }}
@@ -215,17 +215,17 @@ export function Scene6Analytics() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "flex-start",
-        gap: 26,
-        padding: "24px 24px 0",
+        justifyContent: "center",
+        gap: 12,
+        padding: "12px 24px",
         width: "100%",
         height: "100%",
       }}
     >
       <motion.div style={{ opacity, y, width: "100%", display: "flex", justifyContent: "center" }}>
         <BrowserWindow url="app.persift.app/analytics" width="90vw" maxWidth={1040}>
-          <DashboardShell activeTab="analytics" tone="day" embedded maxHeight="calc(100vh - 200px)">
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <DashboardShell activeTab="analytics" tone="day" embedded>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               <TimelineChart />
 
               <div
