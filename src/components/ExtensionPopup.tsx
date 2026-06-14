@@ -6,15 +6,9 @@ export type PopupStatus = "ready" | "applying"
 
 type ExtensionPopupProps = {
   status: PopupStatus
-  /** label shown next to the status dot in the header */
   statusLabel: string
-  /** whether the header dot should pulse (e.g. while applying overnight) */
-  pulse?: boolean
-  /** body content for the popup */
   children: ReactNode
-  /** auto-apply toggle state */
   toggleOn?: boolean
-  /** footer caption */
   footnote?: string
   width?: number
 }
@@ -27,7 +21,6 @@ type ExtensionPopupProps = {
 export function ExtensionPopup({
   status,
   statusLabel,
-  pulse = false,
   children,
   toggleOn = true,
   footnote = "Auto-apply",
@@ -139,12 +132,6 @@ export function ExtensionPopup({
         </div>
       </div>
 
-      <style>{`
-        @keyframes popupPulse {
-          0% { transform: scale(0.8); opacity: 0.9; }
-          100% { transform: scale(2.4); opacity: 0; }
-        }
-      `}</style>
     </div>
   )
 }

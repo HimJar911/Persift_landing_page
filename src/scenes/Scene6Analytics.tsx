@@ -3,7 +3,7 @@ import { useSceneProgress } from "../scroll/SceneContext"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { DashboardShell } from "../components/DashboardShell"
 import { BrowserWindow } from "../components/BrowserWindow"
-import { CopyLine } from "../components/CopyLine"
+import { useFitScale } from "../hooks/useFitScale"
 
 const BARS = [3, 5, 4, 6, 5, 8, 7, 9, 6, 8, 11, 9, 12, 10, 13, 9, 14, 12, 11, 15]
 const BAR_MAX = Math.max(...BARS)
@@ -208,21 +208,32 @@ export function Scene6Analytics() {
   const isMobile = useIsMobile()
   const opacity = useTransform(p, [0, 0.22], [0, 1])
   const y = useTransform(p, [0, 0.22], [16, 0])
+  const { containerRef, contentRef, scale } = useFitScale(24)
 
   return (
     <div
+      ref={containerRef}
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: 12,
-        padding: "12px 24px",
         width: "100%",
         height: "100%",
       }}
     >
-      <motion.div style={{ opacity, y, width: "100%", display: "flex", justifyContent: "center" }}>
+      <motion.div
+        ref={contentRef}
+        style={{
+          opacity,
+          y,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          transformOrigin: "center",
+          scale,
+        }}
+      >
         <BrowserWindow url="app.persift.app/analytics" width="90vw" maxWidth={1040}>
           <DashboardShell activeTab="analytics" tone="day" embedded>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

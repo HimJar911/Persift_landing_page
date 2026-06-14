@@ -2,6 +2,7 @@ import { useState } from "react"
 import { motion, useTransform, useMotionValueEvent, type MotionValue } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
 import { useIsMobile } from "../hooks/useIsMobile"
+import { useFitScale } from "../hooks/useFitScale"
 import { ExtensionPopup } from "../components/ExtensionPopup"
 import { SurfaceFrame } from "../components/Surfaces"
 import { PersiftMark } from "../components/Brand"
@@ -24,12 +25,12 @@ const PIPELINE: Company[] = [
     role: "Software Engineer Intern",
     match: 94,
     ats: "greenhouse",
-    formTitle: "Software Engineer Intern — Stripe · Application",
+    formTitle: "Software Engineer Intern, Stripe · Application",
     essay:
-      "I want to build payments infrastructure that millions of businesses rely on, and I care about correctness under scale.",
+      "Honestly I got into payments because a refund for my side project took 9 days and I couldn't figure out why. I want to work on the stuff people only notice when it breaks.",
     tailorBullets: [
-      "Built a fault-tolerant ledger service handling 12k req/s",
-      "Reduced API p99 latency by 38% with request batching",
+      "Wrote the checkout logic for my club's event app, handled ~400 ticket payments",
+      "Spent a weekend hunting a double-charge bug, learned idempotency keys the hard way",
     ],
   },
   {
@@ -37,13 +38,12 @@ const PIPELINE: Company[] = [
     role: "Infrastructure Intern",
     match: 91,
     ats: "ashby",
-    formTitle: "Infrastructure Intern — Anthropic · Application",
+    formTitle: "Infrastructure Intern, Anthropic · Application",
     essay:
-      "I'm drawn to building reliable infrastructure for constitutional AI at scale, where safety-conscious engineering and distributed systems meet.",
+      "I blew through my GPU credits twice this semester training a tiny model, so reliable infra isn't abstract to me. It's the difference between a project working and me being broke. Want to do it at real scale.",
     tailorBullets: [
-      "Distributed training orchestration across 64-GPU clusters",
-      "Safety-conscious rollout tooling with staged guardrails",
-      "Infra scale: petabyte-range checkpoint pipelines",
+      "Ran distributed training on the campus cluster for a class project, lots of OOM errors",
+      "Built a Slack bot that pings me when a job crashes so I stop losing overnight runs",
     ],
   },
   {
@@ -51,12 +51,12 @@ const PIPELINE: Company[] = [
     role: "Design Engineer Intern",
     match: 87,
     ats: "greenhouse",
-    formTitle: "Design Engineer Intern — Figma · Application",
+    formTitle: "Design Engineer Intern, Figma · Application",
     essay:
-      "I want to work at the intersection of design and engineering — building tools that make creativity more accessible is exactly the kind of problem I care about.",
+      "I'm the person on every team who ends up redoing the Figma file because the spacing bugs me. I like sitting right between design and code. That's where I do my best work.",
     tailorBullets: [
-      "Built a component library used by 200+ designers daily",
-      "Improved canvas rendering performance by 40% via reflow batching",
+      "Built a small React component library for our hackathon team so we stopped redoing buttons",
+      "Rewrote a laggy canvas feature in a side project, went from janky to actually smooth",
     ],
   },
 ]
@@ -128,7 +128,7 @@ function DiscoveryCard({ mv }: { mv: MotionValue<number> }) {
       <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
         <Logo name="Stripe" />
         <div style={{ display: "flex", flexDirection: "column", gap: 3, minWidth: 0 }}>
-          <span style={{ fontSize: "clamp(15px, 4.6vw, 18px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.01em" }}>
+          <span style={{ fontSize: 18, fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.01em" }}>
             Software Engineer Intern
           </span>
           <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>Stripe · Posted 4 minutes ago</span>
@@ -465,9 +465,9 @@ function NeedsYouBody() {
           !
         </span>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>Figma — Design Engineer Intern</span>
+          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>Figma · Design Engineer Intern</span>
           <span style={{ fontSize: 12.5, color: "var(--ink-soft)", lineHeight: 1.45 }}>
-            Ready to submit — review before we send?
+            Ready to submit. Review before we send?
           </span>
         </div>
       </div>
@@ -511,6 +511,7 @@ function NeedsYouBody() {
 export function Scene3Machine() {
   const p = useSceneProgress()
   const isMobile = useIsMobile()
+  const { containerRef, contentRef, scale: fitScale } = useFitScale(24)
 
   // discovery beat holds for the first ~28% of the band, then crossfades out
   const discoveryOpacity = useTransform(p, [0, 0.10, 0.32, 0.44], [0, 1, 1, 0])
@@ -519,7 +520,7 @@ export function Scene3Machine() {
   // applying loop: each company gets an equal slice, company boundaries at whole numbers
   // so frac resets cleanly to 0 at every switch — no mid-fill jumps
   const APPLY_START = 0.44
-  const APPLY_END = 0.88
+  const APPLY_END = 0.85
   const BAND = (APPLY_END - APPLY_START) / PIPELINE.length
 
   const rawIndex = useTransform(p, (v) =>
@@ -535,7 +536,7 @@ export function Scene3Machine() {
   // needs-you toggles on near the end
   const [needsYou, setNeedsYou] = useState(false)
   useMotionValueEvent(p, "change", (v) => {
-    const on = v >= 0.90
+    const on = v >= 0.86
     if (on !== needsYou) setNeedsYou(on)
   })
 
@@ -543,11 +544,24 @@ export function Scene3Machine() {
   const frac = useTransform(rawIndex, (v) => v - Math.floor(v))
   const [phase, setPhase] = useState<"tailoring" | "filling">("tailoring")
   useMotionValueEvent(frac, "change", (f) => {
-    const next = f < 0.35 ? "tailoring" : "filling"
+    const next = f < 0.45 ? "tailoring" : "filling"
     if (next !== phase) setPhase(next)
   })
-  // fillFrac: 0→1 during the filling phase (65% of each slot)
-  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.35) / 0.65)))
+  // fillFrac: 0→1 during the filling phase — starts at 0.75 (after form is fully visible)
+  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.75) / 0.25)))
+  // mobile: popup fades out [0.25→0.50], form fades in [0.50→0.75], fill starts after 0.75
+  const popupOpacity = useTransform(frac, [0.25, 0.50], [1, 0])
+  const formOpacity  = useTransform(frac, [0.50, 0.75], [0, 1])
+  // company switch crossfade: fade out in last 8% of slot, fade in in first 8% of next slot
+  // skip fade-out for the last company so there's no black gap before the next scene
+  const companyCrossfade = useTransform(rawIndex, (v) => {
+    const i = Math.floor(v)
+    const f = v - i
+    const isLast = i >= PIPELINE.length - 1
+    if (f < 0.08) return f / 0.08
+    if (!isLast && f > 0.92) return (1 - f) / 0.08
+    return 1
+  })
   const fill = useTransform(fillFrac, (f) => `${Math.round(f * 100)}%`)
 
   const active = PIPELINE[current]
@@ -556,7 +570,7 @@ export function Scene3Machine() {
   const headlineOpacity = useTransform(p, [0, 0.08, 0.38, 0.46], [0, 1, 1, 0])
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
       {/* floating headline — visible during discovery beat */}
       <motion.div style={{
         opacity: headlineOpacity,
@@ -605,8 +619,9 @@ export function Scene3Machine() {
 
       {/* the working split-screen */}
       <motion.div
+        ref={contentRef}
         style={{
-          opacity: workOpacity,
+          opacity: useTransform([workOpacity, companyCrossfade], ([w, c]) => (w as number) * (c as number)),
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
@@ -615,70 +630,107 @@ export function Scene3Machine() {
           flexWrap: isMobile ? "nowrap" : "wrap",
           padding: isMobile ? "0 16px" : "0 28px",
           width: "100%",
-          transform: isMobile ? "scale(0.82)" : "none",
+          scale: fitScale,
           transformOrigin: "center",
         }}
       >
-        {/* LEFT — the extension doing the work */}
-        {needsYou ? (
-          <ExtensionPopup status="applying" statusLabel="Needs you" pulse toggleOn footnote="Auto-apply" width={340}>
-            <NeedsYouBody />
-          </ExtensionPopup>
-        ) : (
-          <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={340}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div>
-                <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
-                  {phase === "tailoring" ? "Tailoring resume for" : "Currently applying to"}
-                </span>
-                <div style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 9 }}>
-                  <Logo name={active.name} />
-                  <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{active.name}</span>
-                    <span style={{ fontSize: 12, color: "var(--ink-mute)" }}>{active.role}</span>
-                  </div>
-                </div>
-                <div style={{ marginTop: 12, height: 5, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
-                  <motion.div
-                    style={{
-                      height: "100%",
-                      width: fill,
-                      borderRadius: 999,
-                      background: "linear-gradient(90deg, var(--amber-deep), var(--amber-soft))",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-faint)" }}>
-                  Next in line
-                </span>
-                {queue.length === 0 && <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>}
-                {queue.map((c) => (
-                  <div key={c.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                      <Logo name={c.name} />
-                      <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>{c.name}</span>
+        {/* LEFT — extension popup (always on desktop; on mobile only during tailoring phase) */}
+        {isMobile ? (
+          <div style={{ position: "relative", width: "100%", display: "flex", justifyContent: "center", minHeight: 520 }}>
+            {/* popup — fades out as form fades in */}
+            <motion.div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", opacity: popupOpacity, pointerEvents: phase === "tailoring" ? "auto" : "none", width: "100%", display: "flex", justifyContent: "center" }}>
+              {needsYou ? (
+                <ExtensionPopup status="applying" statusLabel="Needs you" toggleOn footnote="Auto-apply" width={340}>
+                  <NeedsYouBody />
+                </ExtensionPopup>
+              ) : (
+                <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={340}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    <div>
+                      <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
+                        Tailoring resume for
+                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 9 }}>
+                        <Logo name={active.name} />
+                        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{active.name}</span>
+                          <span style={{ fontSize: 12, color: "var(--ink-mute)" }}>{active.role}</span>
+                        </div>
+                      </div>
+                      <div style={{ marginTop: 12, height: 5, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
+                        <motion.div style={{ height: "100%", width: fill, borderRadius: 999, background: "linear-gradient(90deg, var(--amber-deep), var(--amber-soft))" }} />
+                      </div>
                     </div>
-                    <span style={{ fontSize: 12, color: "var(--amber-soft)", fontWeight: 600 }}>{c.match}% match</span>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-faint)" }}>Next in line</span>
+                      {queue.length === 0 && <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>}
+                      {queue.map((c) => (
+                        <div key={c.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                            <Logo name={c.name} />
+                            <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>{c.name}</span>
+                          </div>
+                          <span style={{ fontSize: 12, color: "var(--amber-soft)", fontWeight: 600 }}>{c.match}% match</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </ExtensionPopup>
-        )}
+                </ExtensionPopup>
+              )}
+            </motion.div>
 
-        {/* connective beam (desktop only) */}
-        {!isMobile && (
-          <div
-            aria-hidden="true"
-            style={{ width: 40, height: 2, background: "linear-gradient(90deg, var(--amber-soft), transparent)", alignSelf: "center", opacity: 0.6 }}
-          />
-        )}
+            {/* form — fades in as popup fades out, always rendered as "filling" */}
+            <motion.div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", opacity: formOpacity, pointerEvents: phase === "filling" ? "auto" : "none", width: "100%", display: "flex", justifyContent: "center" }}>
+              <ApplicationForm company={active} fillMV={fillFrac} phase="filling" />
+            </motion.div>
+          </div>
+        ) : (
+          <>
+            {needsYou ? (
+              <ExtensionPopup status="applying" statusLabel="Needs you" toggleOn footnote="Auto-apply" width={340}>
+                <NeedsYouBody />
+              </ExtensionPopup>
+            ) : (
+              <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={340}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div>
+                    <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
+                      {phase === "tailoring" ? "Tailoring resume for" : "Currently applying to"}
+                    </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 9 }}>
+                      <Logo name={active.name} />
+                      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{active.name}</span>
+                        <span style={{ fontSize: 12, color: "var(--ink-mute)" }}>{active.role}</span>
+                      </div>
+                    </div>
+                    <div style={{ marginTop: 12, height: 5, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
+                      <motion.div style={{ height: "100%", width: fill, borderRadius: 999, background: "linear-gradient(90deg, var(--amber-deep), var(--amber-soft))" }} />
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-faint)" }}>Next in line</span>
+                    {queue.length === 0 && <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>}
+                    {queue.map((c) => (
+                      <div key={c.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                          <Logo name={c.name} />
+                          <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>{c.name}</span>
+                        </div>
+                        <span style={{ fontSize: 12, color: "var(--amber-soft)", fontWeight: 600 }}>{c.match}% match</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </ExtensionPopup>
+            )}
 
-        {/* RIGHT — the real form being filled */}
-        <ApplicationForm company={active} fillMV={fillFrac} phase={phase} />
+            {/* connective beam */}
+            <div aria-hidden="true" style={{ width: 40, height: 2, background: "linear-gradient(90deg, var(--amber-soft), transparent)", alignSelf: "center", opacity: 0.6 }} />
+
+            <ApplicationForm company={active} fillMV={fillFrac} phase={phase} />
+          </>
+        )}
       </motion.div>
     </div>
   )

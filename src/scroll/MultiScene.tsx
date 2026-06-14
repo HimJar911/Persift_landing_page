@@ -1,6 +1,7 @@
 import { useRef, type ReactNode } from "react"
-import { motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion"
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion"
 import { SceneProgressContext } from "./SceneContext"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 type Step = {
   label: string
@@ -86,7 +87,7 @@ function SceneSlot({
   })
 
   const pointerEvents = useTransform(progress, (v) =>
-    v >= enterStart && v <= exitEnd ? "auto" : "none"
+    v >= enterEnd && v <= exitStart ? "auto" : "none"
   )
 
   if (fullBleed) {
@@ -157,7 +158,10 @@ function StepLabel({
 
   return (
     <motion.div
+      role="button"
+      tabIndex={0}
       onClick={onJump}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onJump() }}
       style={{
         opacity: blockOpacity,
         position: "relative",
@@ -236,7 +240,7 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
     target: ref,
     offset: ["start start", "end end"],
   })
-  const progress = useSpring(scrollYProgress, { stiffness: 400, damping: 60, restDelta: 0.0001 })
+  const progress = scrollYProgress
 
   const bandsRef = useRef(bands)
   bandsRef.current = bands
@@ -250,6 +254,8 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
     }
     return n - 1
   })
+
+  const isNarrow = useIsMobile(900)
 
   const firstLabeled = steps.findIndex(s => s.label !== "")
   const navBandStart = firstLabeled >= 0 ? bands[firstLabeled].start : 0
@@ -287,37 +293,39 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
       >
         {/* Nav + content column */}
         <div style={{ position: "absolute", inset: 0, display: "flex", pointerEvents: "none" }}>
-          <motion.div
-            style={{
-              flexShrink: 0,
-              width: 200,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              paddingLeft: 44,
-              gap: 2,
-              opacity: navOpacity,
-              x: navX,
-              marginLeft: navX,
-              pointerEvents: "auto",
-            }}
-          >
-            {steps.map((step, i) => step.label ? (
-              <div key={step.label}>
-                {i === lastLabeledIndex && (
-                  <div style={{ height: 1, background: "rgba(240,163,65,0.18)", marginLeft: 16, marginBottom: 4, marginTop: 4 }} />
-                )}
-                <StepLabel
-                  label={step.label}
-                  description={step.description}
-                  index={i}
-                  activeIndex={activeIndex}
-                  onJump={() => jumpToStep(i)}
-                  isCtaStep={i === lastLabeledIndex}
-                />
-              </div>
-            ) : null)}
-          </motion.div>
+          {!isNarrow && (
+            <motion.div
+              style={{
+                flexShrink: 0,
+                width: 200,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                paddingLeft: 44,
+                gap: 2,
+                opacity: navOpacity,
+                x: navX,
+                marginLeft: navX,
+                pointerEvents: "auto",
+              }}
+            >
+              {steps.map((step, i) => step.label ? (
+                <div key={step.label}>
+                  {i === lastLabeledIndex && (
+                    <div style={{ height: 1, background: "rgba(240,163,65,0.18)", marginLeft: 16, marginBottom: 4, marginTop: 4 }} />
+                  )}
+                  <StepLabel
+                    label={step.label}
+                    description={step.description}
+                    index={i}
+                    activeIndex={activeIndex}
+                    onJump={() => jumpToStep(i)}
+                    isCtaStep={i === lastLabeledIndex}
+                  />
+                </div>
+              ) : null)}
+            </motion.div>
+          )}
 
           <div style={{ flex: 1, position: "relative", minWidth: 0, overflow: "hidden", pointerEvents: "auto" }}>
             {steps.map((step, i) => !step.fullBleed ? (

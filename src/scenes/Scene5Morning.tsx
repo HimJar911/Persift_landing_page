@@ -2,7 +2,8 @@ import { motion, useTransform } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
 import { DashboardShell } from "../components/DashboardShell"
 import { BrowserWindow } from "../components/BrowserWindow"
-import { CopyLine } from "../components/CopyLine"
+import { useFitScale } from "../hooks/useFitScale"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 function StatCard({ value, label, accent }: { value: string; label: string; accent?: boolean }) {
   return (
@@ -135,21 +136,33 @@ export function Scene5Morning() {
   const p = useSceneProgress()
   const headY = useTransform(p, [0, 0.25], [16, 0])
   const headOpacity = useTransform(p, [0, 0.25], [0, 1])
+  const { containerRef, contentRef, scale } = useFitScale(24)
+  const isMobile = useIsMobile(900)
 
   return (
     <div
+      ref={containerRef}
       style={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: 12,
-        padding: "12px 24px",
         width: "100%",
         height: "100%",
       }}
     >
-      <motion.div style={{ opacity: headOpacity, y: headY, width: "100%", display: "flex", justifyContent: "center" }}>
+      <motion.div
+        ref={contentRef}
+        style={{
+          opacity: headOpacity,
+          y: headY,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          transformOrigin: "center",
+          scale,
+        }}
+      >
         <BrowserWindow url="app.persift.app/dashboard" width="90vw" maxWidth={1040}>
           <DashboardShell activeTab="overview" tone="dawn" embedded>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -167,13 +180,13 @@ export function Scene5Morning() {
                 Good morning.
               </h3>
               <p style={{ margin: "4px 0 0", fontSize: 13.5, color: "var(--ink-soft)" }}>
-                You applied to <strong style={{ color: "var(--amber-soft)", fontWeight: 600 }}>8 jobs</strong>{" "}
-                while you were sleeping.
+                <strong style={{ color: "var(--amber-soft)", fontWeight: 600 }}>8 applications</strong>{" "}
+                sent overnight. 3 responses waiting.
               </p>
             </div>
 
             {/* stat cards */}
-            <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)", gap: 10 }}>
               <StatCard value="8" label="Submitted" />
               <StatCard value="3" label="Responses" />
               <StatCard value="1" label="Needs you" accent />

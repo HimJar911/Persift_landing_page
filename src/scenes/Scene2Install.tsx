@@ -1,6 +1,8 @@
 import { motion, useTransform } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
 import { PersiftMark } from "../components/Brand"
+import { useFitScale } from "../hooks/useFitScale"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 /**
  * The "install Persift" beat — a full Chrome Web Store page (light theme)
@@ -212,6 +214,8 @@ function MiniAnalyticsPreview() {
 
 export function Scene2Install() {
   const p = useSceneProgress()
+  const { containerRef, contentRef, scale: fitScale } = useFitScale(16)
+  const isMobile = useIsMobile(900)
 
   // the window settles in
   const scale = useTransform(p, [0, 0.3], [0.95, 1])
@@ -225,6 +229,7 @@ export function Scene2Install() {
 
   return (
     <div
+      ref={containerRef}
       style={{
         position: "relative",
         width: "100%",
@@ -233,10 +238,10 @@ export function Scene2Install() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: 20,
         padding: "0 24px",
       }}
     >
+      <div ref={contentRef} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 20, transformOrigin: "center", scale: fitScale }}>
       {/* Section headline */}
       <div style={{ textAlign: "center", display: "flex", flexDirection: "column", gap: 8 }}>
         <h3 style={{
@@ -426,17 +431,19 @@ export function Scene2Install() {
           </div>
 
           {/* screenshots — real product UI */}
-          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            <ScreenshotTile label="It applies for you">
-              <MiniApplyingPreview />
-            </ScreenshotTile>
-            <ScreenshotTile label="Wake up to results">
-              <MiniMorningPreview />
-            </ScreenshotTile>
-            <ScreenshotTile label="See what's working">
-              <MiniAnalyticsPreview />
-            </ScreenshotTile>
-          </div>
+          {!isMobile && (
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+              <ScreenshotTile label="It applies for you">
+                <MiniApplyingPreview />
+              </ScreenshotTile>
+              <ScreenshotTile label="Wake up to results">
+                <MiniMorningPreview />
+              </ScreenshotTile>
+              <ScreenshotTile label="See what's working">
+                <MiniAnalyticsPreview />
+              </ScreenshotTile>
+            </div>
+          )}
         </div>
 
         {/* installed toast bar */}
@@ -457,7 +464,7 @@ export function Scene2Install() {
           <span style={{ fontSize: 11.5, color: "#c9a86a", marginLeft: "auto" }}>Pinned to toolbar</span>
         </motion.div>
       </motion.div>
-
+      </div>
     </div>
   )
 }

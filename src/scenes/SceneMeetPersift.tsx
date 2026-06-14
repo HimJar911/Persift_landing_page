@@ -74,7 +74,7 @@ export function SceneMeetPersift() {
         position: "relative",
       }}>
         Finds early-career roles, tailors your resume to each one,
-        and submits applications — all on its own.
+        and submits applications, all on its own.
       </p>
 
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center", position: "relative" }}>
@@ -117,8 +117,7 @@ export function SceneMeetPersift() {
           pointerEvents: "auto",
         }}
         onClick={() => {
-          const totalVh = 300 + 150 + 200 + 350 + 400 + 300 + 100 + 100 + 150
-          window.scrollTo({ top: ((totalVh - 150) / 100) * window.innerHeight, behavior: "smooth" })
+          document.getElementById("section-cta")?.scrollIntoView({ behavior: "smooth" })
         }}
       >
         Join waitlist

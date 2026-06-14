@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { motion, useTransform, useMotionValueEvent } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
+import { useFitScale } from "../hooks/useFitScale"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 const IDENTITY_FIELDS = [
   { label: "NAME",        value: "Jordan Reyes",   band: [0.04, 0.11] },
@@ -118,6 +120,8 @@ function CheckItem({ label, at, p }: { label: string; at: number; p: ReturnType<
 
 export function Scene2Setup() {
   const p = useSceneProgress()
+  const isMobile = useIsMobile(900)
+  const { containerRef, contentRef, scale } = useFitScale(16)
 
   const resumeOpacity = useTransform(p, [RESUME_AT, RESUME_AT + 0.04], [0, 1])
   const toggleOpacity = useTransform(p, [TOGGLE_ON_AT - 0.04, TOGGLE_ON_AT], [0, 1])
@@ -129,12 +133,10 @@ export function Scene2Setup() {
   useMotionValueEvent(p, "change", (v) => setIsOn(v >= TOGGLE_ON_AT))
 
   return (
-    <div style={{
+    <div ref={containerRef} style={{
       width: "100%", height: "100%",
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      padding: "20px 32px",
       boxSizing: "border-box",
-      gap: 20,
       position: "relative",
     }}>
       {/* ambient glow */}
@@ -147,27 +149,30 @@ export function Scene2Setup() {
         opacity: glowOpacity,
       }} />
 
+      <div ref={contentRef} style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? 14 : 20, padding: isMobile ? "12px 20px" : "20px 32px", boxSizing: "border-box", transformOrigin: "center", scale: isMobile ? 1 : scale }}>
       {/* headline */}
-      <div style={{ textAlign: "center", display: "flex", flexDirection: "column", gap: 8, position: "relative" }}>
+      <div style={{ textAlign: "center", display: "flex", flexDirection: "column", gap: 6, position: "relative" }}>
         <h3 style={{
           margin: 0,
           fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontWeight: 800,
-          fontSize: "clamp(26px, 3.5vw, 42px)",
+          fontSize: isMobile ? "clamp(22px, 6vw, 30px)" : "clamp(26px, 3.5vw, 42px)",
           letterSpacing: "-0.025em",
           color: "var(--ink)",
         }}>
           Tell it what you&apos;re looking for.
         </h3>
-        <p style={{
-          margin: 0,
-          fontFamily: "Inter, sans-serif",
-          fontWeight: 400,
-          fontSize: "clamp(13px, 1.3vw, 16px)",
-          color: "var(--ink-soft)",
-        }}>
-          Once. Persift handles every application from here.
-        </p>
+        {!isMobile && (
+          <p style={{
+            margin: 0,
+            fontFamily: "Inter, sans-serif",
+            fontWeight: 400,
+            fontSize: "clamp(13px, 1.3vw, 16px)",
+            color: "var(--ink-soft)",
+          }}>
+            Once. Persift handles every application from here.
+          </p>
+        )}
       </div>
 
       {/* card */}
@@ -208,24 +213,25 @@ export function Scene2Setup() {
         {/* Two-column body */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          padding: "20px 20px",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          padding: isMobile ? "14px 16px" : "20px 20px",
+          gap: isMobile ? 12 : 0,
         }}>
           {/* LEFT */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 13, paddingRight: 24 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 13, paddingRight: isMobile ? 0 : 24 }}>
             <span style={{
               fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase",
               color: "var(--amber-deep)", fontWeight: 700,
             }}>
               About you
             </span>
-            {IDENTITY_FIELDS.map((f) => (
+            {IDENTITY_FIELDS.filter(f => !isMobile || f.label === "NAME" || f.label === "UNIVERSITY").map((f) => (
               <TypedField key={f.label} label={f.label} value={f.value}
                 fillStart={f.band[0]} fillEnd={f.band[1]} p={p} />
             ))}
 
             {/* Resume */}
-            <motion.div style={{ opacity: resumeOpacity, display: "flex", flexDirection: "column", gap: 5, marginTop: 2 }}>
+            <motion.div style={{ opacity: resumeOpacity, display: isMobile ? "none" : "flex", flexDirection: "column", gap: 5, marginTop: 2 }}>
               <span style={{
                 fontSize: 9, letterSpacing: "0.08em", textTransform: "uppercase",
                 color: "var(--amber-deep)", fontWeight: 600,
@@ -254,8 +260,10 @@ export function Scene2Setup() {
           {/* RIGHT */}
           <div style={{
             display: "flex", flexDirection: "column", gap: 13,
-            paddingLeft: 24,
-            borderLeft: "1px solid rgba(240,163,65,0.1)",
+            paddingLeft: isMobile ? 0 : 24,
+            borderLeft: isMobile ? "none" : "1px solid rgba(240,163,65,0.1)",
+            borderTop: isMobile ? "1px solid rgba(240,163,65,0.1)" : "none",
+            paddingTop: isMobile ? 12 : 0,
           }}>
             <span style={{
               fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase",
@@ -263,23 +271,25 @@ export function Scene2Setup() {
             }}>
               Job preferences
             </span>
-            {PREF_FIELDS.map((f) => (
+            {PREF_FIELDS.filter(f => !isMobile || f.label === "ROLE TYPES" || f.label === "LOCATIONS").map((f) => (
               <TypedField key={f.label} label={f.label} value={f.value}
                 fillStart={f.band[0]} fillEnd={f.band[1]} p={p} />
             ))}
 
             {/* Checklist */}
+            {!isMobile && (
             <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 2 }}>
               {CHECKS.map((c) => (
                 <CheckItem key={c.label} label={c.label} at={c.at} p={p} />
               ))}
             </div>
+            )}
 
             {/* Auto-apply toggle */}
             <motion.div style={{
               opacity: toggleOpacity,
               y: toggleY,
-              display: "flex", alignItems: "center", justifyContent: "space-between",
+              display: isMobile ? "none" : "flex", alignItems: "center", justifyContent: "space-between",
               padding: "11px 13px", borderRadius: 11,
               background: isOn ? "rgba(240,163,65,0.1)" : "rgba(255,255,255,0.02)",
               border: `1px solid ${isOn ? "rgba(240,163,65,0.4)" : "rgba(240,163,65,0.12)"}`,
@@ -315,6 +325,7 @@ export function Scene2Setup() {
             </motion.div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )

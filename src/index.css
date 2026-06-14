@@ -13,7 +13,7 @@
   --ink: #f3ece1;
   --ink-soft: #cdc3b4;
   --ink-mute: #8a8071;
-  --ink-faint: #5f574b;
+  --ink-faint: #7a7166;
   --amber: #f0a341;
   --amber-soft: #f6c178;
   --amber-deep: #c97a1f;
@@ -50,6 +50,14 @@ body {
 input,
 button {
   font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* thin custom scrollbar */

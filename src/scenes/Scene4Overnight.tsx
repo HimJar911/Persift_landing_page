@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence, useTransform, useMotionValueEvent } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
+import { useIsMobile } from "../hooks/useIsMobile"
 import { ExtensionPopup } from "../components/ExtensionPopup"
 
 const TIMES = [
@@ -64,7 +65,7 @@ function PipelineDots({ tailored, submitted, active }: { tailored: boolean; subm
   )
 }
 
-function CompanyRow({ c, clockIndex }: { c: Company; clockIndex: number }) {
+function CompanyRow({ c, clockIndex, isMobile }: { c: Company; clockIndex: number; isMobile: boolean }) {
   const tailored  = clockIndex >= c.tailoredIdx
   const submitted = clockIndex >= c.submittedIdx
   const active    = !submitted
@@ -91,27 +92,29 @@ function CompanyRow({ c, clockIndex }: { c: Company; clockIndex: number }) {
 
       <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         <span style={{ color: "var(--ink)", fontWeight: 500 }}>{c.name}</span>
-        {" "}<span style={{ color: "var(--ink-faint)" }}>— {c.role}</span>
+        {" "}<span style={{ color: "var(--ink-faint)" }}>· {c.role}</span>
       </span>
 
       <PipelineDots tailored={tailored} submitted={submitted} active={active} />
 
-      <span
-        style={{
-          width: COL_MATCH,
-          flexShrink: 0,
-          textAlign: "center",
-          fontSize: 10.5,
-          fontWeight: 600,
-          color: submitted ? "rgba(95,208,127,0.85)" : "var(--amber-soft)",
-          padding: "2px 0",
-          borderRadius: 999,
-          border: submitted ? "1px solid rgba(95,208,127,0.3)" : "1px solid rgba(240,163,65,0.28)",
-          background: submitted ? "rgba(95,208,127,0.08)" : "rgba(240,163,65,0.08)",
-        }}
-      >
-        {c.match}%
-      </span>
+      {!isMobile && (
+        <span
+          style={{
+            width: COL_MATCH,
+            flexShrink: 0,
+            textAlign: "center",
+            fontSize: 10.5,
+            fontWeight: 600,
+            color: submitted ? "rgba(95,208,127,0.85)" : "var(--amber-soft)",
+            padding: "2px 0",
+            borderRadius: 999,
+            border: submitted ? "1px solid rgba(95,208,127,0.3)" : "1px solid rgba(240,163,65,0.28)",
+            background: submitted ? "rgba(95,208,127,0.08)" : "rgba(240,163,65,0.08)",
+          }}
+        >
+          {c.match}%
+        </span>
+      )}
 
       <div style={{ width: COL_TIME, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 5 }}>
         {active ? (
@@ -140,6 +143,7 @@ function CompanyRow({ c, clockIndex }: { c: Company; clockIndex: number }) {
 
 export function Scene4Overnight() {
   const p = useSceneProgress()
+  const isMobile = useIsMobile(900)
 
   const clockMV = useTransform(p, [0, 1], [0, TIMES.length - 1])
   const [clockIndex, setClockIndex] = useState(0)
@@ -219,7 +223,7 @@ export function Scene4Overnight() {
       </div>
 
       <div style={{ position: "relative", zIndex: 2 }}>
-        <ExtensionPopup status="applying" statusLabel="Applying" pulse toggleOn footnote="Auto-apply" width={500}>
+        <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={500}>
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -238,7 +242,7 @@ export function Scene4Overnight() {
 
             <AnimatePresence initial={false}>
               {visible.map((c) => (
-                <CompanyRow key={c.name} c={c} clockIndex={clockIndex} />
+                <CompanyRow key={c.name} c={c} clockIndex={clockIndex} isMobile={isMobile} />
               ))}
             </AnimatePresence>
 

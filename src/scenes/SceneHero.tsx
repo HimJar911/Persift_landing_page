@@ -1,6 +1,6 @@
 import { motion, useTransform } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
-import deskImg from "../assets/desk.png"
+import deskImg from "../assets/desk.webp"
 
 const BG     = "#0c0a08"
 const IMG_W  = 1522
@@ -20,8 +20,8 @@ const ZOOM_SCALE = IMG_W / SCREEN_W  // ≈ 3.04
 // 0.60 → 0.80  terminal text fades out
 // 0.80 → 1.00  entire layer fades out (crossfade to Meet Persift)
 const ZOOM_END    = 0.60
-const IMG_FADE_E  = 0.70
-const COPY_FADE_E = 0.80
+const IMG_FADE_E  = 0.75
+const COPY_FADE_E = 0.90
 
 export function SceneHero() {
   const p = useSceneProgress()
@@ -35,6 +35,9 @@ export function SceneHero() {
 
   return (
     <div style={{ position: "absolute", inset: 0, background: BG, overflow: "hidden" }}>
+      <h1 style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>
+        Persift: automated job applications for early-career roles
+      </h1>
       {/* fills the transparent screen cutout in the desk image at all zoom levels */}
       <div style={{ position: "absolute", inset: 0, background: "#060a08" }} />
       <motion.div style={{
@@ -67,6 +70,7 @@ export function SceneHero() {
           opacity: screenOpacity,
           background: "#060a08",
           overflow: "hidden",
+          containerType: "inline-size",
         }}>
           {/* solid fill that fades in as zoom progresses, covering any texture artifacts */}
           <motion.div style={{ position: "absolute", inset: 0, background: "#060a08", zIndex: 1, opacity: useTransform(p, [0.25, 0.50], [0, 1]) }} />
@@ -81,14 +85,14 @@ export function SceneHero() {
             padding: "12% 14%",
             pointerEvents: "none",
           }}>
-            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "0.72vw", fontWeight: 400, color: "rgba(160,220,170,0.55)", letterSpacing: "0.02em", lineHeight: 1.8, whiteSpace: "nowrap" }}>
+            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.55)", letterSpacing: "0.02em", lineHeight: 1.8, whiteSpace: "nowrap" }}>
               $ status --job-search
             </p>
-            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "0.72vw", fontWeight: 400, color: "rgba(160,220,170,0.38)", letterSpacing: "0.02em", lineHeight: 1.8, marginBottom: "1.1vw", whiteSpace: "nowrap" }}>
+            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.38)", letterSpacing: "0.02em", lineHeight: 1.8, marginBottom: "3.4cqw", whiteSpace: "nowrap" }}>
               &gt; 247 applications. 0 replies. Tired yet?
             </p>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.3vw" }}>
-              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "1.35vw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.9cqw" }}>
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "4.1cqw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
                 $ persift --start
               </span>
             </div>

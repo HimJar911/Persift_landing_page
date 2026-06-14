@@ -7,11 +7,17 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const LAUNCHLIST_URL = "https://getlaunchlist.com/s/vvpphU"
 const LS_KEY = "persift_waitlist_email"
 
+function getRefCode() {
+  try {
+    return new URLSearchParams(window.location.search).get("ref") ?? undefined
+  } catch { return undefined }
+}
+
 export function Scene7Ask() {
   const [email, setEmail] = useState("")
-  const [status, setStatus] = useState<Status>(() =>
-    localStorage.getItem(LS_KEY) ? "already" : "idle"
-  )
+  const [status, setStatus] = useState<Status>(() => {
+    try { return localStorage.getItem(LS_KEY) ? "already" : "idle" } catch { return "idle" }
+  })
   const [errorMsg, setErrorMsg] = useState("")
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,7 +30,8 @@ export function Scene7Ask() {
     setStatus("loading")
     setErrorMsg("")
     try {
-      const [llRes] = await Promise.all([
+      const ref = getRefCode()
+      const [llRes, apiRes] = await Promise.all([
         fetch(LAUNCHLIST_URL, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -33,11 +40,11 @@ export function Scene7Ask() {
         fetch("/api/waitlist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim() }),
+          body: JSON.stringify({ email: email.trim(), ref }),
         }),
       ])
-      if (!llRes.ok) throw new Error(`${llRes.status}`)
-      localStorage.setItem(LS_KEY, email.trim())
+      if (!llRes.ok && !apiRes.ok) throw new Error(`${llRes.status}`)
+      try { localStorage.setItem(LS_KEY, email.trim()) } catch { /* private mode */ }
       setStatus("success")
     } catch {
       setErrorMsg("Something went wrong. Please try again.")
@@ -49,7 +56,7 @@ export function Scene7Ask() {
     <div style={{
       position: "relative",
       width: "100%",
-      minHeight: "100vh",
+      height: "100%",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -107,7 +114,7 @@ export function Scene7Ask() {
             lineHeight: 1.5,
           }}>
             {status === "success"
-              ? "You're on the list. We'll reach out when Persift is ready."
+              ? "You're on the list. Check your email for your referral link."
               : "You're already on the list. We'll reach out when Persift is ready."}
           </div>
         ) : (
@@ -131,6 +138,8 @@ export function Scene7Ask() {
                 onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle") }}
                 placeholder="you@university.edu"
                 aria-label="Email address"
+                aria-invalid={status === "error"}
+                aria-describedby={status === "error" ? "waitlist-error" : undefined}
                 disabled={status === "loading"}
                 style={{
                   flex: 1,
@@ -162,9 +171,13 @@ export function Scene7Ask() {
                 {status === "loading" ? "Joining…" : "Join waitlist"}
               </button>
             </form>
-            {status === "error" && (
-              <span style={{ fontSize: 12.5, color: "rgba(240,100,80,0.9)" }}>{errorMsg}</span>
-            )}
+            <span
+              id="waitlist-error"
+              role="alert"
+              style={{ fontSize: 12.5, color: "rgba(240,100,80,0.9)", minHeight: "1em" }}
+            >
+              {status === "error" ? errorMsg : ""}
+            </span>
           </>
         )}
         <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Private beta · August 2026</span>
@@ -173,11 +186,6 @@ export function Scene7Ask() {
         </span>
       </div>
 
-      <div style={{ position: "absolute", bottom: 26, left: 0, right: 0, textAlign: "center" }}>
-        <span style={{ fontSize: 10.5, color: "var(--ink-faint)", letterSpacing: "0.04em" }}>
-          Built by Himanshu Jarodiya · CS @ ASU
-        </span>
-      </div>
     </div>
   )
 }

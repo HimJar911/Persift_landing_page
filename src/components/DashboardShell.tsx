@@ -9,7 +9,6 @@ type DashboardShellProps = {
   tone?: "dawn" | "day"
   width?: number | string
   embedded?: boolean
-  maxHeight?: string
 }
 
 const TABS: { id: Tab; label: string }[] = [
@@ -21,7 +20,7 @@ const TABS: { id: Tab; label: string }[] = [
  * The Persift dashboard chrome — shared topbar, logo and nav tabs across
  * scenes 5 and 6. Only the active tab and body change.
  */
-export function DashboardShell({ activeTab, children, tone = "day", width = 720, embedded = false, maxHeight }: DashboardShellProps) {
+export function DashboardShell({ activeTab, children, tone = "day", width = 720, embedded = false }: DashboardShellProps) {
   return (
     <div
       style={{
@@ -29,7 +28,6 @@ export function DashboardShell({ activeTab, children, tone = "day", width = 720,
         maxWidth: embedded ? "none" : "92vw",
         borderRadius: embedded ? 0 : 20,
         overflow: "hidden",
-        maxHeight,
         background: embedded ? "transparent" : "linear-gradient(180deg, #1a150f, #14100b)",
         border: embedded ? "none" : "1px solid var(--line)",
         boxShadow: embedded ? "none" : "0 40px 90px -40px rgba(0,0,0,0.85), 0 10px 30px -16px rgba(0,0,0,0.6)",
