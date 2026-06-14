@@ -1,5 +1,6 @@
 import { motion, useTransform } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
+import { jumpToCtaScene } from "../scroll/nav"
 
 const PILLS = [
   "Finds roles before they hit LinkedIn",
@@ -116,9 +117,7 @@ export function SceneMeetPersift() {
           position: "relative",
           pointerEvents: "auto",
         }}
-        onClick={() => {
-          document.getElementById("section-cta")?.scrollIntoView({ behavior: "smooth" })
-        }}
+        onClick={jumpToCtaScene}
       >
         Join waitlist
       </motion.button>

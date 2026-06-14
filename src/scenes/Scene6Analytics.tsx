@@ -131,7 +131,7 @@ function statusColor(status: Row["status"]) {
 }
 
 function ApplicationsTable() {
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile(900)
   // mobile: Company, Role, Status only. desktop: full set.
   const cols = isMobile ? "1.1fr 1.2fr 1fr" : "1.3fr 1.4fr 1fr 1fr 0.7fr"
   return (
@@ -205,7 +205,7 @@ function ApplicationsTable() {
 
 export function Scene6Analytics() {
   const p = useSceneProgress()
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile(900)
   const opacity = useTransform(p, [0, 0.22], [0, 1])
   const y = useTransform(p, [0, 0.22], [16, 0])
   const { containerRef, contentRef, scale } = useFitScale(24)

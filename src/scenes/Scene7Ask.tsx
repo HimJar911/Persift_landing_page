@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Wordmark } from "../components/Brand"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 type Status = "idle" | "loading" | "success" | "error" | "already"
 
@@ -14,6 +15,7 @@ function getRefCode() {
 }
 
 export function Scene7Ask() {
+  const isMobile = useIsMobile(640)
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<Status>(() => {
     try { return localStorage.getItem(LS_KEY) ? "already" : "idle" } catch { return "idle" }
@@ -123,12 +125,15 @@ export function Scene7Ask() {
               onSubmit={handleSubmit}
               style={{
                 display: "flex",
-                gap: 8,
+                flexDirection: isMobile ? "column" : "row",
+                gap: isMobile ? 10 : 8,
                 width: "100%",
-                background: "var(--surface)",
-                border: `1px solid ${status === "error" ? "rgba(240,100,80,0.5)" : "var(--line)"}`,
-                borderRadius: 13,
-                padding: 6,
+                ...(isMobile ? {} : {
+                  background: "var(--surface)",
+                  border: `1px solid ${status === "error" ? "rgba(240,100,80,0.5)" : "var(--line)"}`,
+                  borderRadius: 13,
+                  padding: 8,
+                }),
               }}
             >
               <input
@@ -143,13 +148,22 @@ export function Scene7Ask() {
                 disabled={status === "loading"}
                 style={{
                   flex: 1,
-                  border: "none",
                   outline: "none",
-                  background: "transparent",
                   color: "var(--ink)",
                   fontSize: 15,
-                  padding: "10px 12px",
                   opacity: status === "loading" ? 0.5 : 1,
+                  ...(isMobile ? {
+                    border: `1px solid ${status === "error" ? "rgba(240,100,80,0.5)" : "var(--line)"}`,
+                    borderRadius: 13,
+                    background: "var(--surface)",
+                    padding: "14px 16px",
+                    width: "100%",
+                    boxSizing: "border-box" as const,
+                  } : {
+                    border: "none",
+                    background: "transparent",
+                    padding: "12px 12px",
+                  }),
                 }}
               />
               <button
@@ -159,13 +173,18 @@ export function Scene7Ask() {
                   border: "none",
                   cursor: status === "loading" ? "default" : "pointer",
                   borderRadius: 9,
-                  padding: "10px 20px",
                   fontSize: 14,
                   fontWeight: 600,
                   color: "#1a1206",
                   background: "linear-gradient(180deg, var(--amber-soft), var(--amber))",
                   whiteSpace: "nowrap",
                   opacity: status === "loading" ? 0.6 : 1,
+                  ...(isMobile ? {
+                    padding: "14px 28px",
+                    alignSelf: "center",
+                  } : {
+                    padding: "12px 20px",
+                  }),
                 }}
               >
                 {status === "loading" ? "Joining…" : "Join waitlist"}

@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react"
 import { motion, useScroll, useMotionValue, useTransform } from "framer-motion"
 import { MultiScene } from "./scroll/MultiScene"
+import { registerJumpToStep, jumpToCtaScene } from "./scroll/nav"
 import { Wordmark } from "./components/Brand"
 import { SceneHero } from "./scenes/SceneHero"
 import { SceneMeetPersift } from "./scenes/SceneMeetPersift"
@@ -13,10 +14,6 @@ import { Scene6Analytics } from "./scenes/Scene6Analytics"
 import { Scene7Ask } from "./scenes/Scene7Ask"
 
 const HEADER_H = 48
-
-function scrollToCta() {
-  document.getElementById("section-cta")?.scrollIntoView({ behavior: "smooth" })
-}
 
 export default function App() {
   const pageRef = useRef<HTMLDivElement>(null)
@@ -51,12 +48,10 @@ export default function App() {
         justifyContent: "space-between",
         padding: "0 32px",
         zIndex: 110,
-        background: "rgba(12,10,8,0.88)",
-        backdropFilter: "blur(8px)",
       }}>
         <Wordmark height={30} />
         <button
-          onClick={scrollToCta}
+          onClick={jumpToCtaScene}
           style={{
             border: "none",
             cursor: "pointer",
@@ -122,12 +117,13 @@ export default function App() {
       {/* ── One master scroll timeline ── */}
       <MultiScene
         topOffset={HEADER_H}
+        onReady={registerJumpToStep}
         steps={[
           { label: "", description: "", scrollHeight: "240vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },
           { label: "", description: "", scrollHeight: "80vh", fullBleed: true,  noSlide: true, children: <SceneMeetPersift /> },
           { label: "Install",   description: "One click from the Chrome Web Store.",    scrollHeight: "200vh", children: <Scene2Install /> },
           { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "200vh", children: <Scene2Setup /> },
-          { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "650vh", children: <Scene3Machine /> },
+          { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "2000vh", children: <Scene3Machine /> },
           { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "180vh", children: <Scene4Overnight /> },
           { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "100vh", children: <Scene5Morning /> },
           { label: "Analytics", description: "See what's working.",                     scrollHeight: "100vh", children: <Scene6Analytics /> },

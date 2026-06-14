@@ -281,19 +281,101 @@ const ATS_STYLE: Record<Ats, { accent: string; surfaceBg: string; fieldBg: strin
   },
 }
 
+function TypedField({ label, value, fillMV, start, end, accent, dark }: {
+  label: string; value: string; fillMV: MotionValue<number>
+  start: number; end: number; accent: string; dark: boolean
+}) {
+  const typed = useTransform(fillMV, (f) => {
+    const t = Math.max(0, Math.min(1, (f - start) / (end - start)))
+    return value.slice(0, Math.round(value.length * t))
+  })
+  const ink = dark ? "#e9e2d6" : "#2f3a33"
+  const fieldBorder = dark ? "#2e261d" : "#d4ddd6"
+  const caretVisible = useTransform(fillMV, (f) => f >= start && f < end ? 1 : 0)
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <span style={{ fontSize: 10, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>{label}</span>
+      <motion.div
+        style={{
+          height: 27,
+          borderRadius: 5,
+          background: useTransform(fillMV, (f) =>
+            f >= start && f < end ? (dark ? "#211a13" : "#fff") : (dark ? "#211a13" : "#fff")
+          ),
+          border: useTransform(fillMV, (f) =>
+            f >= start && f < end ? `1.5px solid ${accent}` : `1px solid ${fieldBorder}`
+          ),
+          boxShadow: useTransform(fillMV, (f) =>
+            f >= start && f < end ? `0 0 0 3px ${accent}1f` : "none"
+          ),
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 9px",
+          fontSize: 11.5,
+          color: ink,
+        }}
+      >
+        <span style={{ display: "flex", alignItems: "center" }}>
+          <motion.span>{typed}</motion.span>
+          <motion.span
+            style={{
+              opacity: caretVisible,
+              display: "inline-block",
+              width: 1.5,
+              height: 13,
+              background: accent,
+              marginLeft: 1,
+              transform: "translateY(2px)",
+            }}
+          />
+        </span>
+        <motion.span style={{ opacity: useTransform(fillMV, (f) => f >= end ? 1 : 0) }}>
+          <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M2.5 6.2l2.2 2.3L9.5 3.5" stroke={accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </motion.span>
+      </motion.div>
+    </div>
+  )
+}
+
 function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV: MotionValue<number>; phase: "tailoring" | "filling" }) {
   const style = ATS_STYLE[company.ats]
   const dark = company.ats === "custom"
 
-  const ANSWER = company.essay
-  const typed = useTransform(fillMV, (f) => ANSWER.slice(0, Math.round(ANSWER.length * Math.min(1, f * 1.15))))
-  const caretOpacity = useTransform(fillMV, (f) => (f < 0.98 ? 1 : 0))
+  const ESSAY = company.essay
+  const essayTyped = useTransform(fillMV, (f) => {
+    const t = Math.max(0, Math.min(1, (f - 0.62) / 0.38))
+    return ESSAY.slice(0, Math.round(ESSAY.length * t))
+  })
+  const essayCaretOpacity = useTransform(fillMV, (f) => (f >= 0.62 && f < 0.99 ? 1 : 0))
   const barWidth = useTransform(fillMV, (f) => `${Math.round(f * 100)}%`)
+  const autofillDotOpacity = useTransform(fillMV, (f) => (f < 0.99 ? 1 : 0))
 
-  // colors that adapt to dark (Linear) vs light (Greenhouse/Ashby) forms
   const ink = dark ? "#e9e2d6" : "#2f3a33"
   const inkMute = dark ? "#9a9183" : "#6a7a70"
   const fieldBorder = dark ? "#2e261d" : "#d4ddd6"
+
+  const resumeFilename = `resume_${company.name.toLowerCase()}_tailored.pdf`
+  const resumeTyped = useTransform(fillMV, (f) => {
+    const t = Math.max(0, Math.min(1, (f - 0.20) / 0.08))
+    return resumeFilename.slice(0, Math.round(resumeFilename.length * t))
+  })
+  const resumeDone = useTransform(fillMV, (f) => f >= 0.28 ? 1 : 0)
+  const resumeBorder = useTransform(fillMV, (f) =>
+    f >= 0.20 && f < 0.28 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
+  )
+  const resumeBoxShadow = useTransform(fillMV, (f) =>
+    f >= 0.20 && f < 0.28 ? `0 0 0 3px ${style.accent}1f` : "none"
+  )
+  const essayBorder = useTransform(fillMV, (f) =>
+    f >= 0.62 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
+  )
+  const essayBoxShadow = useTransform(fillMV, (f) =>
+    f >= 0.62 && f < 0.99 ? `0 0 0 3px ${style.accent}1f` : "none"
+  )
 
   return (
     <SurfaceFrame url={style.url(company.name)} accent={style.accent} width={440}>
@@ -330,7 +412,7 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
               padding: "3px 9px",
             }}
           >
-            <motion.span style={{ width: 6, height: 6, borderRadius: "50%", background: "#e0992f", opacity: caretOpacity }} />
+            <motion.span style={{ width: 6, height: 6, borderRadius: "50%", background: "#e0992f", opacity: autofillDotOpacity }} />
             Persift autofilling
           </span>
         </div>
@@ -348,18 +430,19 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
           </div>
         ) : (
           <>
-            <FilledField label="Full name" value="Jordan Reyes" done accent={style.accent} />
-            <FilledField label="Email" value="jordan.reyes@berkeley.edu" done accent={style.accent} />
+            <TypedField label="Full name" value="Jordan Reyes" fillMV={fillMV} start={0.00} end={0.10} accent={style.accent} dark={dark} />
+            <TypedField label="Email" value="jordan.reyes@berkeley.edu" fillMV={fillMV} start={0.10} end={0.20} accent={style.accent} dark={dark} />
 
             {/* resume */}
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
               <span style={{ fontSize: 10, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>Resume / CV</span>
-              <div
+              <motion.div
                 style={{
                   height: 27,
                   borderRadius: 5,
                   background: dark ? "#211a13" : "#eef5f0",
-                  border: `1px solid ${fieldBorder}`,
+                  border: resumeBorder,
+                  boxShadow: resumeBoxShadow,
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
@@ -368,48 +451,49 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
                   color: ink,
                 }}
               >
-                <span style={{ width: 8, height: 8, borderRadius: 2, background: style.accent }} />
-                resume_{company.name.toLowerCase()}_tailored.pdf
-                <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true" style={{ marginLeft: "auto" }}>
-                  <path d="M2.5 6.2l2.2 2.3L9.5 3.5" stroke={style.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
+                <span style={{ width: 8, height: 8, borderRadius: 2, background: style.accent, flexShrink: 0 }} />
+                <motion.span style={{ flex: 1 }}>{resumeTyped}</motion.span>
+                <motion.span style={{ opacity: resumeDone }}>
+                  <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2.5 6.2l2.2 2.3L9.5 3.5" stroke={style.accent} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </motion.span>
+              </motion.div>
             </div>
 
-            {/* expanded real-application fields (Change 10) */}
-            <FilledField label="Work authorization" value="U.S. Citizen or Permanent Resident" done accent={style.accent} />
+            <TypedField label="Work authorization" value="U.S. Citizen or Permanent Resident" fillMV={fillMV} start={0.28} end={0.40} accent={style.accent} dark={dark} />
             <div style={{ display: "flex", gap: 10 }}>
               <div style={{ flex: 1 }}>
-                <FilledField label="Graduation date" value="May 2027" done accent={style.accent} />
+                <TypedField label="Graduation date" value="May 2027" fillMV={fillMV} start={0.40} end={0.48} accent={style.accent} dark={dark} />
               </div>
               <div style={{ width: 92 }}>
-                <FilledField label="GPA" value="3.8" done accent={style.accent} />
+                <TypedField label="GPA" value="3.8" fillMV={fillMV} start={0.48} end={0.53} accent={style.accent} dark={dark} />
               </div>
             </div>
-            <FilledField label="Portfolio / GitHub" value="github.com/jordanreyes" done accent={style.accent} />
+            <TypedField label="Portfolio / GitHub" value="github.com/jordanreyes" fillMV={fillMV} start={0.53} end={0.62} accent={style.accent} dark={dark} />
 
-            {/* the essay being typed right now */}
+            {/* essay */}
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
               <span style={{ fontSize: 10, color: dark ? "#9a9183" : "#3a4a40", fontWeight: 500 }}>
                 Why do you want to work here?
               </span>
-              <div
+              <motion.div
                 style={{
                   minHeight: 54,
                   borderRadius: 5,
                   background: dark ? "#211a13" : "#fff",
-                  border: `1.5px solid ${style.accent}`,
-                  boxShadow: `0 0 0 3px ${style.accent}1f`,
+                  border: essayBorder,
+                  boxShadow: essayBoxShadow,
                   padding: "6px 9px",
                   fontSize: 11.5,
                   lineHeight: 1.45,
                   color: ink,
                 }}
               >
-                <motion.span>{typed}</motion.span>
+                <motion.span>{essayTyped}</motion.span>
                 <motion.span
                   style={{
-                    opacity: caretOpacity,
+                    opacity: essayCaretOpacity,
                     display: "inline-block",
                     width: 1.5,
                     height: 13,
@@ -418,7 +502,7 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
                     transform: "translateY(2px)",
                   }}
                 />
-              </div>
+              </motion.div>
             </div>
 
             {/* fill progress */}
@@ -510,16 +594,13 @@ function NeedsYouBody() {
 
 export function Scene3Machine() {
   const p = useSceneProgress()
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile(900)
   const { containerRef, contentRef, scale: fitScale } = useFitScale(24)
 
-  // discovery beat holds for the first ~28% of the band, then crossfades out
-  const discoveryOpacity = useTransform(p, [0, 0.10, 0.32, 0.44], [0, 1, 1, 0])
-  const workOpacity = useTransform(p, [0.38, 0.46, 0.88, 1.0], [0, 1, 1, 0])
+  const discoveryOpacity = useTransform(p, [0, 0.05, 0.14, 0.22], [0, 1, 1, 0])
+  const workOpacity = useTransform(p, [0.18, 0.24, 0.88, 1.0], [0, 1, 1, 0])
 
-  // applying loop: each company gets an equal slice, company boundaries at whole numbers
-  // so frac resets cleanly to 0 at every switch — no mid-fill jumps
-  const APPLY_START = 0.44
+  const APPLY_START = 0.22
   const APPLY_END = 0.85
   const BAND = (APPLY_END - APPLY_START) / PIPELINE.length
 
@@ -547,8 +628,8 @@ export function Scene3Machine() {
     const next = f < 0.45 ? "tailoring" : "filling"
     if (next !== phase) setPhase(next)
   })
-  // fillFrac: 0→1 during the filling phase — starts at 0.75 (after form is fully visible)
-  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.75) / 0.25)))
+  // fillFrac: 0→1 during the filling phase — starts at 0.55 (after form is fully visible)
+  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.55) / 0.45)))
   // mobile: popup fades out [0.25→0.50], form fades in [0.50→0.75], fill starts after 0.75
   const popupOpacity = useTransform(frac, [0.25, 0.50], [1, 0])
   const formOpacity  = useTransform(frac, [0.50, 0.75], [0, 1])
@@ -559,7 +640,7 @@ export function Scene3Machine() {
     const f = v - i
     const isLast = i >= PIPELINE.length - 1
     if (f < 0.08) return f / 0.08
-    if (!isLast && f > 0.92) return (1 - f) / 0.08
+    if (!isLast && f > 0.96) return (1 - f) / 0.04
     return 1
   })
   const fill = useTransform(fillFrac, (f) => `${Math.round(f * 100)}%`)
@@ -567,7 +648,7 @@ export function Scene3Machine() {
   const active = PIPELINE[current]
   const queue = PIPELINE.slice(current + 1)
 
-  const headlineOpacity = useTransform(p, [0, 0.08, 0.38, 0.46], [0, 1, 1, 0])
+  const headlineOpacity = useTransform(p, [0, 0.05, 0.14, 0.22], [0, 1, 1, 0])
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>

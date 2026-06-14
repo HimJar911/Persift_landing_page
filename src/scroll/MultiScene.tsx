@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react"
+import { useRef, useEffect, type ReactNode } from "react"
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion"
 import { SceneProgressContext } from "./SceneContext"
 import { useIsMobile } from "../hooks/useIsMobile"
@@ -15,6 +15,7 @@ type Step = {
 type MultiSceneProps = {
   steps: Step[]
   topOffset?: number
+  onReady?: (jumpToStep: (i: number) => void) => void
 }
 
 function parseVh(s: string): number {
@@ -220,7 +221,7 @@ function StepLabel({
   )
 }
 
-export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
+export function MultiScene({ steps, topOffset = 0, onReady }: MultiSceneProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   const vhs     = steps.map((s) => parseVh(s.scrollHeight))
@@ -276,6 +277,8 @@ export function MultiScene({ steps, topOffset = 0 }: MultiSceneProps) {
     const totalPx = ref.current.scrollHeight
     window.scrollTo({ top: containerTop + bands[i].start * totalPx, behavior: "smooth" })
   }
+
+  useEffect(() => { onReady?.(jumpToStep) }, [])
 
   const lastLabeledIndex = steps.reduce((acc, s, i) => s.label ? i : acc, -1)
 
