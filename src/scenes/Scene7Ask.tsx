@@ -2,11 +2,24 @@ import { useState } from "react"
 import { Wordmark } from "../components/Brand"
 import { useIsMobile } from "../hooks/useIsMobile"
 
-type Status = "idle" | "loading" | "success" | "error" | "already"
+function LegalFooter() {
+  return (
+    <div style={{ display: "flex", gap: 20, justifyContent: "center" }}>
+      <a href="/privacy" style={{ fontSize: 12, color: "var(--ink-faint)", textDecoration: "none", fontFamily: "Inter, sans-serif" }}>Privacy</a>
+      <a href="/terms" style={{ fontSize: 12, color: "var(--ink-faint)", textDecoration: "none", fontFamily: "Inter, sans-serif" }}>Terms</a>
+    </div>
+  )
+}
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+type Status = "idle" | "loading" | "success" | "error"
+
+const EMAIL_RE = /^[^\s@]+@[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/
 const LAUNCHLIST_URL = "https://getlaunchlist.com/s/vvpphU"
 const LS_KEY = "persift_waitlist_email"
+
+function getSavedEmail() {
+  try { return localStorage.getItem(LS_KEY) ?? "" } catch { return "" }
+}
 
 function getRefCode() {
   try {
@@ -16,14 +29,17 @@ function getRefCode() {
 
 export function Scene7Ask() {
   const isMobile = useIsMobile(640)
-  const [email, setEmail] = useState("")
-  const [status, setStatus] = useState<Status>(() => {
-    try { return localStorage.getItem(LS_KEY) ? "already" : "idle" } catch { return "idle" }
-  })
+  const savedEmail = getSavedEmail()
+  const [email, setEmail] = useState(() => savedEmail)
+  const [honeypot, setHoneypot] = useState("")
+  const [submittedEmail, setSubmittedEmail] = useState("")
+  const [status, setStatus] = useState<Status>("idle")
   const [errorMsg, setErrorMsg] = useState("")
+  const [showAlreadyBanner, setShowAlreadyBanner] = useState(() => !!savedEmail)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (honeypot) return
     if (!EMAIL_RE.test(email.trim())) {
       setErrorMsg("Please enter a valid email address.")
       setStatus("error")
@@ -33,20 +49,26 @@ export function Scene7Ask() {
     setErrorMsg("")
     try {
       const ref = getRefCode()
-      const [llRes, apiRes] = await Promise.all([
-        fetch(LAUNCHLIST_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ email: email.trim() }).toString(),
-        }),
-        fetch("/api/waitlist", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim(), ref }),
-        }),
-      ])
-      if (!llRes.ok && !apiRes.ok) throw new Error(`${llRes.status}`)
+      fetch(LAUNCHLIST_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ email: email.trim() }).toString(),
+      }).catch(() => {})
+      const apiRes = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), ref, website: honeypot }),
+      })
+      if (apiRes.status === 400) {
+        const body = await apiRes.json().catch(() => ({}))
+        setErrorMsg(body?.error ?? "Please enter a valid email address.")
+        setStatus("error")
+        return
+      }
+      if (!apiRes.ok) throw new Error(`${apiRes.status}`)
       try { localStorage.setItem(LS_KEY, email.trim()) } catch { /* private mode */ }
+      setSubmittedEmail(email.trim())
+      setShowAlreadyBanner(false)
       setStatus("success")
     } catch {
       setErrorMsg("Something went wrong. Please try again.")
@@ -103,7 +125,7 @@ export function Scene7Ask() {
         width: "100%",
         maxWidth: 420,
       }}>
-        {(status === "success" || status === "already") ? (
+        {status === "success" ? (
           <div style={{
             padding: "14px 22px",
             borderRadius: 12,
@@ -115,9 +137,7 @@ export function Scene7Ask() {
             textAlign: "center",
             lineHeight: 1.5,
           }}>
-            {status === "success"
-              ? "You're on the list. Check your email for your referral link."
-              : "You're already on the list. We'll reach out when Persift is ready."}
+            You're on the list at <strong>{submittedEmail}</strong>. Check your email for your referral link.
           </div>
         ) : (
           <>
@@ -137,10 +157,24 @@ export function Scene7Ask() {
               }}
             >
               <input
+                type="text"
+                name="website"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                aria-hidden="true"
+                autoComplete="off"
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
+              />
+              <input
                 type="email"
                 required
                 value={email}
-                onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle") }}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (status === "error") setStatus("idle")
+                  if (showAlreadyBanner) setShowAlreadyBanner(false)
+                }}
                 placeholder="you@university.edu"
                 aria-label="Email address"
                 aria-invalid={status === "error"}
@@ -190,19 +224,39 @@ export function Scene7Ask() {
                 {status === "loading" ? "Joining…" : "Join waitlist"}
               </button>
             </form>
-            <span
-              id="waitlist-error"
-              role="alert"
-              style={{ fontSize: 12.5, color: "rgba(240,100,80,0.9)", minHeight: "1em" }}
-            >
-              {status === "error" ? errorMsg : ""}
-            </span>
+            {status === "error" && (
+              <span
+                id="waitlist-error"
+                role="alert"
+                style={{ fontSize: 12.5, color: "rgba(240,100,80,0.9)" }}
+              >
+                {errorMsg}
+              </span>
+            )}
+            {showAlreadyBanner && (
+              <div style={{
+                padding: "10px 16px",
+                borderRadius: 10,
+                border: "1px solid rgba(240,163,65,0.3)",
+                background: "rgba(240,163,65,0.06)",
+                color: "var(--amber-soft)",
+                fontSize: 13,
+                fontWeight: 500,
+                textAlign: "center",
+                lineHeight: 1.5,
+                width: "100%",
+                boxSizing: "border-box",
+              }}>
+                You're already on the list at <strong>{savedEmail}</strong>.
+              </div>
+            )}
           </>
         )}
         <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Private beta · August 2026</span>
         <span style={{ fontSize: 11.5, color: "var(--ink-faint)", textAlign: "center" }}>
           We'll only reach out when Persift launches. No spam.
         </span>
+        <LegalFooter />
       </div>
 
     </div>

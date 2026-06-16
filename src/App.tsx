@@ -1,10 +1,10 @@
-import { useRef, useEffect } from "react"
-import { motion, useScroll, useMotionValue, useTransform } from "framer-motion"
+import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion"
 import { MultiScene } from "./scroll/MultiScene"
+import { MobileLayout } from "./scroll/MobileLayout"
 import { registerJumpToStep, jumpToCtaScene } from "./scroll/nav"
+import { useIsMobile } from "./hooks/useIsMobile"
 import { Wordmark } from "./components/Brand"
 import { SceneHero } from "./scenes/SceneHero"
-import { SceneMeetPersift } from "./scenes/SceneMeetPersift"
 import { Scene2Install } from "./scenes/Scene2Install"
 import { Scene2Setup } from "./scenes/Scene2Setup"
 import { Scene3Machine } from "./scenes/Scene3Machine"
@@ -16,17 +16,20 @@ import { Scene7Ask } from "./scenes/Scene7Ask"
 const HEADER_H = 48
 
 export default function App() {
-  const pageRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile(900)
 
-  const { scrollYProgress } = useScroll()
+  // progress is wired directly from MultiScene's wheel interceptor via onProgressReady
   const progress = useMotionValue(0)
-  useEffect(() => scrollYProgress.on("change", (v) => progress.set(v)), [scrollYProgress])
 
   const barScale = useTransform(progress, [0, 1], [0, 1])
-  const scrollHintOpacity = useTransform(progress, [0, 0.03, 0.06, 0.5, 0.55], [1, 0, 1, 1, 0])
+  const scrollHintOpacity = useTransform(progress, [0, 0.03, 0.06, 0.91, 0.94], [1, 0, 1, 1, 0])
+
+  function handleProgressReady(mv: MotionValue<number>) {
+    mv.on("change", (v) => progress.set(v))
+  }
 
   return (
-    <main ref={pageRef} style={{ background: "var(--bg)" }}>
+    <main style={{ background: "var(--bg)" }}>
       {/* scroll progress bar */}
       <motion.div style={{
         position: "fixed",
@@ -49,7 +52,9 @@ export default function App() {
         padding: "0 32px",
         zIndex: 110,
       }}>
-        <Wordmark height={30} />
+        <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+          <Wordmark height={30} />
+        </a>
         <button
           onClick={jumpToCtaScene}
           style={{
@@ -68,13 +73,13 @@ export default function App() {
         </button>
       </header>
 
-      {/* scroll hint */}
+      {/* scroll hint — desktop only */}
       <motion.div style={{
         position: "fixed",
         bottom: 28,
         left: "50%",
         x: "-50%",
-        opacity: scrollHintOpacity,
+        opacity: isMobile ? 0 : scrollHintOpacity,
         zIndex: 100,
         display: "flex",
         flexDirection: "column",
@@ -114,22 +119,27 @@ export default function App() {
         </div>
       </motion.div>
 
-      {/* ── One master scroll timeline ── */}
-      <MultiScene
-        topOffset={HEADER_H}
-        onReady={registerJumpToStep}
-        steps={[
-          { label: "", description: "", scrollHeight: "240vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },
-          { label: "", description: "", scrollHeight: "80vh", fullBleed: true,  noSlide: true, children: <SceneMeetPersift /> },
-          { label: "Install",   description: "One click from the Chrome Web Store.",    scrollHeight: "200vh", children: <Scene2Install /> },
-          { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "200vh", children: <Scene2Setup /> },
-          { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "2000vh", children: <Scene3Machine /> },
-          { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "180vh", children: <Scene4Overnight /> },
-          { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "100vh", children: <Scene5Morning /> },
-          { label: "Analytics", description: "See what's working.",                     scrollHeight: "100vh", children: <Scene6Analytics /> },
-          { label: "Launch",    description: "Stop applying. Start interviewing.",      scrollHeight: "150vh", children: <div id="section-cta" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Scene7Ask /></div> },
-        ]}
-      />
+      {/* ── Mobile: flat stacked sections ── */}
+      {isMobile && <MobileLayout />}
+
+      {/* ── Desktop: scroll-driven sticky timeline ── */}
+      {!isMobile && (
+        <MultiScene
+          topOffset={HEADER_H}
+          onReady={registerJumpToStep}
+          onProgressReady={handleProgressReady}
+          steps={[
+            { label: "", description: "", scrollHeight: "65vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },
+            { label: "Install",   description: "One click from the Chrome Web Store.",    scrollHeight: "120vh", noSlide: true, children: <Scene2Install /> },
+            { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "86vh", children: <Scene2Setup /> },
+            { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "940vh", children: <Scene3Machine /> },
+            { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "150vh", earlyEnter: 0.04, children: <Scene4Overnight /> },
+            { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "100vh", children: <Scene5Morning /> },
+            { label: "Analytics", description: "See what's working.",                     scrollHeight: "100vh", children: <Scene6Analytics /> },
+            { label: "Launch",    description: "Stop applying. Start interviewing.",      scrollHeight: "150vh", children: <div id="section-cta" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Scene7Ask /></div> },
+          ]}
+        />
+      )}
     </main>
   )
 }

@@ -3,6 +3,11 @@
   50%       { opacity: 0; }
 }
 
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 :root {
   /* warm, nocturnal palette */
   --bg: #0c0a08;
@@ -58,6 +63,51 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* legal page tables */
+.legal-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0;
+}
+.legal-table th,
+.legal-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+}
+.legal-table th {
+  color: var(--ink-mute);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.02);
+}
+
+/* prose links in legal pages */
+.legal-prose a {
+  color: var(--amber-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.legal-prose code {
+  font-family: "Roboto Mono", monospace;
+  font-size: 13px;
+  background: rgba(255,255,255,0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.legal-prose ul, .legal-prose ol {
+  padding-left: 20px;
+}
+.legal-prose li {
+  margin-bottom: 6px;
+}
+.legal-prose p {
+  margin-bottom: 14px;
 }
 
 /* thin custom scrollbar */

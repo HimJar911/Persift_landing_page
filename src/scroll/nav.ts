@@ -5,5 +5,5 @@ export function registerJumpToStep(fn: (i: number) => void) {
 }
 
 export function jumpToCtaScene() {
-  _jumpToStep?.(8)
+  _jumpToStep?.(7)
 }

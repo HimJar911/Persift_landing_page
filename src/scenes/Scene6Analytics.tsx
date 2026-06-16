@@ -229,11 +229,24 @@ export function Scene6Analytics() {
           y,
           width: "100%",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 20,
           transformOrigin: "center",
           scale,
         }}
       >
+        {!isMobile && <h3 style={{
+          margin: 0,
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(26px, 3.5vw, 42px)",
+          letterSpacing: "-0.025em",
+          color: "var(--ink)",
+          textAlign: "center",
+        }}>
+          See what's working.
+        </h3>}
         <BrowserWindow url="app.persift.app/analytics" width="90vw" maxWidth={1040}>
           <DashboardShell activeTab="analytics" tone="day" embedded>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

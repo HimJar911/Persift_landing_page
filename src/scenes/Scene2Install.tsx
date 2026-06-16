@@ -217,13 +217,13 @@ export function Scene2Install() {
   const { containerRef, contentRef, scale: fitScale } = useFitScale(16)
   const isMobile = useIsMobile(900)
 
-  // the window settles in
-  const scale = useTransform(p, [0, 0.3], [0.95, 1])
-  const winY = useTransform(p, [0, 0.3], [22, 0])
+  // entry fade eats ~0.105, exit fade starts at ~0.895 — animate in the middle
+  const scale = useTransform(p, [0.10, 0.25], [0.97, 1])
+  const winY = useTransform(p, [0.10, 0.25], [14, 0])
 
-  // button flips from "Add to Chrome" to "Added" partway through
-  const addOpacity = useTransform(p, [0.42, 0.52], [1, 0])
-  const addedOpacity = useTransform(p, [0.52, 0.62], [0, 1])
+  // button flips in the middle of the usable window
+  const addOpacity = useTransform(p, [0.30, 0.42], [1, 0])
+  const addedOpacity = useTransform(p, [0.42, 0.55], [0, 1])
   const installedBadgeOpacity = useTransform(p, [0.58, 0.72], [0, 1])
   const installedBadgeY = useTransform(p, [0.58, 0.72], [10, 0])
 

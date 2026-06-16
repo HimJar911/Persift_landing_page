@@ -1,6 +1,7 @@
 import { motion, useTransform } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
 import { jumpToCtaScene } from "../scroll/nav"
+import { LogoTicker } from "../components/LogoTicker"
 
 const PILLS = [
   "Finds roles before they hit LinkedIn",
@@ -19,8 +20,10 @@ export function SceneMeetPersift() {
   const pill1Y = useTransform(p, [0.16, 0.24], [14, 0])
   const pill2O = useTransform(p, [0.24, 0.32], [0, 1])
   const pill2Y = useTransform(p, [0.24, 0.32], [14, 0])
-  const btnO   = useTransform(p, [0.34, 0.44], [0, 1])
-  const btnY   = useTransform(p, [0.34, 0.44], [14, 0])
+  const btnO     = useTransform(p, [0.34, 0.44], [0, 1])
+  const btnY     = useTransform(p, [0.34, 0.44], [14, 0])
+  const tickerO  = useTransform(p, [0.52, 0.64], [0, 1])
+  const tickerY  = useTransform(p, [0.52, 0.64], [14, 0])
 
   const pillAnims = [
     { o: pill0O, y: pill0Y },
@@ -100,6 +103,22 @@ export function SceneMeetPersift() {
           </motion.span>
         ))}
       </div>
+
+      <motion.div style={{ opacity: tickerO, y: tickerY, width: "100%", maxWidth: 680, position: "relative" }}>
+        <p style={{
+          margin: "0 0 10px",
+          fontFamily: "Inter, sans-serif",
+          fontSize: 11.5,
+          fontWeight: 500,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "var(--ink-mute)",
+          textAlign: "center",
+        }}>
+          Roles discovered at
+        </p>
+        <LogoTicker />
+      </motion.div>
 
       <motion.button
         style={{

@@ -9,7 +9,7 @@ const TIMES = [
   "02:07 AM", "02:09 AM", "02:11 AM",
   "02:13 AM", "02:16 AM", "02:18 AM",
   "02:21 AM", "02:24 AM",
-  "02:27 AM", "02:30 AM", "02:33 AM",
+  "02:27 AM",
 ]
 
 const C_FOUND    = "#f0a341"
@@ -32,7 +32,7 @@ const COMPANIES: Company[] = [
   { name: "Anthropic", role: "Infrastructure Intern",     match: 91, submittedTime: "02:11 AM", foundIdx: 3,  tailoredIdx: 4,  submittedIdx: 5  },
   { name: "Figma",     role: "Design Engineer Intern",    match: 87, submittedTime: "02:18 AM", foundIdx: 6,  tailoredIdx: 7,  submittedIdx: 8  },
   { name: "Notion",    role: "Growth Intern",             match: 83, submittedTime: "02:24 AM", foundIdx: 9,  tailoredIdx: 9,  submittedIdx: 10 },
-  { name: "Vercel",    role: "Frontend Engineer Intern",  match: 85, submittedTime: "",         foundIdx: 11, tailoredIdx: 12, submittedIdx: 99 },
+  { name: "Vercel",    role: "Frontend Engineer Intern",  match: 85, submittedTime: "",         foundIdx: 11, tailoredIdx: 99, submittedIdx: 99 },
 ]
 
 const COL_ICON     = 16
@@ -145,7 +145,7 @@ export function Scene4Overnight() {
   const p = useSceneProgress()
   const isMobile = useIsMobile(900)
 
-  const clockMV = useTransform(p, [0, 1], [0, TIMES.length - 1])
+  const clockMV = useTransform(p, [0, 0.75], [0, TIMES.length - 1], { clamp: true })
   const [clockIndex, setClockIndex] = useState(0)
   useMotionValueEvent(clockMV, "change", (v) => {
     const i = Math.min(TIMES.length - 1, Math.max(0, Math.round(v)))
@@ -154,10 +154,10 @@ export function Scene4Overnight() {
 
   const glowScale   = useTransform(p, [0, 0.5, 1], [0.92, 1.06, 0.96])
   const glowOpacity = useTransform(p, [0, 0.2, 0.85, 1], [0.5, 0.95, 0.95, 0.7])
-  const asleepOpacity = useTransform(p, [0.05, 0.22], [0, 1])
-  const asleepY       = useTransform(p, [0.05, 0.22], [18, 0])
-  const isntOpacity   = useTransform(p, [0.18, 0.36], [0, 1])
-  const isntY         = useTransform(p, [0.18, 0.36], [14, 0])
+  const asleepOpacity = useTransform(p, [0.01, 0.05], [0, 1])
+  const asleepY       = useTransform(p, [0.01, 0.05], [18, 0])
+  const isntOpacity   = useTransform(p, [0.03, 0.08], [0, 1])
+  const isntY         = useTransform(p, [0.03, 0.08], [14, 0])
 
   const visible = COMPANIES
     .filter(c => clockIndex >= c.foundIdx)

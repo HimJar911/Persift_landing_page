@@ -5,26 +5,26 @@ import { useFitScale } from "../hooks/useFitScale"
 import { useIsMobile } from "../hooks/useIsMobile"
 
 const IDENTITY_FIELDS = [
-  { label: "NAME",        value: "Jordan Reyes",   band: [0.04, 0.11] },
-  { label: "UNIVERSITY",  value: "UC Berkeley",     band: [0.11, 0.18] },
-  { label: "GRADUATION",  value: "May 2027",        band: [0.18, 0.24] },
-  { label: "VISA STATUS", value: "U.S. Citizen",    band: [0.24, 0.30] },
+  { label: "NAME",        value: "Jordan Reyes",   band: [0.03, 0.08] },
+  { label: "UNIVERSITY",  value: "UC Berkeley",     band: [0.08, 0.13] },
+  { label: "GRADUATION",  value: "May 2027",        band: [0.13, 0.17] },
+  { label: "VISA STATUS", value: "U.S. Citizen",    band: [0.17, 0.21] },
 ]
 
 const PREF_FIELDS = [
-  { label: "ROLE TYPES",  value: "SWE Intern · Data Intern", band: [0.32, 0.40] },
-  { label: "LOCATIONS",   value: "Remote · SF · NYC",         band: [0.40, 0.47] },
-  { label: "MIN MATCH",   value: "75%",                       band: [0.47, 0.52] },
+  { label: "ROLE TYPES",  value: "SWE Intern · Data Intern", band: [0.24, 0.30] },
+  { label: "LOCATIONS",   value: "Remote · SF · NYC",         band: [0.30, 0.35] },
+  { label: "MIN MATCH",   value: "75%",                       band: [0.35, 0.39] },
 ]
 
 const CHECKS = [
-  { label: "Resume uploaded", at: 0.56 },
-  { label: "Preferences set", at: 0.62 },
-  { label: "Ready to run",    at: 0.68 },
+  { label: "Resume uploaded", at: 0.42 },
+  { label: "Preferences set", at: 0.46 },
+  { label: "Ready to run",    at: 0.50 },
 ]
 
-const TOGGLE_ON_AT = 0.78
-const RESUME_AT    = 0.52
+const TOGGLE_ON_AT = 0.57
+const RESUME_AT    = 0.39
 
 function TypedField({ label, value, fillStart, fillEnd, p }: {
   label: string; value: string; fillStart: number; fillEnd: number

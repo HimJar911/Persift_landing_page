@@ -1,5 +1,5 @@
 import { useRef, useEffect, type ReactNode } from "react"
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion"
+import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion"
 import { SceneProgressContext } from "./SceneContext"
 import { useIsMobile } from "../hooks/useIsMobile"
 
@@ -8,14 +8,16 @@ type Step = {
   description: string
   scrollHeight: string
   children: ReactNode
-  fullBleed?: boolean  // bypasses nav column, fills entire sticky viewport
-  noSlide?: boolean    // opacity-only transition, no y movement
+  fullBleed?: boolean   // bypasses nav column, fills entire sticky viewport
+  noSlide?: boolean     // opacity-only transition, no y movement
+  earlyEnter?: number   // start fading in this many global-progress units before band start
 }
 
 type MultiSceneProps = {
   steps: Step[]
   topOffset?: number
   onReady?: (jumpToStep: (i: number) => void) => void
+  onProgressReady?: (progress: MotionValue<number>) => void
 }
 
 function parseVh(s: string): number {
@@ -24,6 +26,9 @@ function parseVh(s: string): number {
 }
 
 const FADE = 0.007
+
+// How much each normalized deltaY unit moves progress. Tune this to feel.
+const SENSITIVITY = 0.00008
 
 function SlicedScene({
   children,
@@ -55,6 +60,7 @@ function SceneSlot({
   isLast,
   fullBleed = false,
   noSlide = false,
+  earlyEnter = 0,
 }: {
   children: ReactNode
   progress: MotionValue<number>
@@ -64,8 +70,9 @@ function SceneSlot({
   isLast: boolean
   fullBleed?: boolean
   noSlide?: boolean
+  earlyEnter?: number  // how much before bandStart to begin fading in (global progress units)
 }) {
-  const enterStart = bandStart
+  const enterStart = bandStart - earlyEnter
   const enterEnd   = bandStart + FADE
   const exitStart  = isLast ? bandEnd : bandEnd - FADE
   const exitEnd    = bandEnd
@@ -221,9 +228,7 @@ function StepLabel({
   )
 }
 
-export function MultiScene({ steps, topOffset = 0, onReady }: MultiSceneProps) {
-  const ref = useRef<HTMLDivElement>(null)
-
+export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: MultiSceneProps) {
   const vhs     = steps.map((s) => parseVh(s.scrollHeight))
   const totalVh = vhs.reduce((a, b) => a + b, 0)
 
@@ -237,26 +242,64 @@ export function MultiScene({ steps, topOffset = 0, onReady }: MultiSceneProps) {
     })
   })()
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  })
-  const progress = scrollYProgress
+  // The single source of truth for all scene rendering — replaces scrollYProgress
+  const progress = useMotionValue(0)
+  const targetRef = useRef(0)
+  const rafRef = useRef<number | null>(null)
 
   const bandsRef = useRef(bands)
   bandsRef.current = bands
 
+  // RAF lerp loop: runs continuously while mounted, chases targetRef
+  useEffect(() => {
+    let current = 0
+
+    function tick() {
+      const target = targetRef.current
+      const diff = target - current
+      // stop updating when close enough to avoid thrashing
+      if (Math.abs(diff) > 0.00001) {
+        current += diff * 0.09
+        progress.set(current)
+      }
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current) }
+  }, [])
+
+  // Wheel interceptor: normalize deltaY, accumulate into targetRef
+  useEffect(() => {
+    function onWheel(e: WheelEvent) {
+      e.preventDefault()
+
+      // Normalize: trackpad sends many small events (~3-5px), mouse wheel sends large ones (~100-120px).
+      // Cap at 100 so a single mouse tick doesn't jump too far.
+      const raw = e.deltaY
+      const normalized = Math.sign(raw) * Math.min(Math.abs(raw), 100)
+
+      targetRef.current = Math.max(0, Math.min(1, targetRef.current + normalized * SENSITIVITY))
+    }
+
+    // Must be non-passive to call preventDefault() and suppress native scroll
+    window.addEventListener("wheel", onWheel, { passive: false })
+    return () => window.removeEventListener("wheel", onWheel)
+  }, [])
+
+  // Expose progress to parent (for the top progress bar in App.tsx)
+  useEffect(() => { onProgressReady?.(progress) }, [])
+
   const activeIndex = useTransform(progress, (v) => {
     const b = bandsRef.current
     const n = b.length
-    for (let i = 0; i < n; i++) {
-      const exitStart = i === n - 1 ? b[i].end : b[i].end - FADE
-      if (v < exitStart) return i
+    for (let i = n - 1; i >= 0; i--) {
+      if (v >= b[i].start + FADE / 2) return i
     }
-    return n - 1
+    return 0
   })
 
-  const isNarrow = useIsMobile(900)
+  const isNarrow = useIsMobile(1100)
 
   const firstLabeled = steps.findIndex(s => s.label !== "")
   const navBandStart = firstLabeled >= 0 ? bands[firstLabeled].start : 0
@@ -272,10 +315,10 @@ export function MultiScene({ steps, topOffset = 0, onReady }: MultiSceneProps) {
   })
 
   function jumpToStep(i: number) {
-    if (!ref.current) return
-    const containerTop = ref.current.getBoundingClientRect().top + window.scrollY
-    const totalPx = ref.current.scrollHeight
-    window.scrollTo({ top: containerTop + bands[i].start * totalPx, behavior: "smooth" })
+    const target = bandsRef.current[i].start
+    // Snap target and current together so lerp doesn't animate across the full page
+    targetRef.current = target
+    progress.set(target)
   }
 
   useEffect(() => { onReady?.(jumpToStep) }, [])
@@ -283,7 +326,7 @@ export function MultiScene({ steps, topOffset = 0, onReady }: MultiSceneProps) {
   const lastLabeledIndex = steps.reduce((acc, s, i) => s.label ? i : acc, -1)
 
   return (
-    <div ref={ref} style={{ position: "relative", height: `${totalVh}vh`, background: "var(--bg)" }}>
+    <div style={{ position: "relative", height: `${totalVh}vh`, background: "var(--bg)" }}>
       <div
         style={{
           position: "sticky",
@@ -339,6 +382,7 @@ export function MultiScene({ steps, topOffset = 0, onReady }: MultiSceneProps) {
                 bandEnd={bands[i].end}
                 isLast={i === steps.length - 1}
                 noSlide={step.noSlide}
+                earlyEnter={step.earlyEnter ?? 0}
               >
                 {step.children}
               </SceneSlot>

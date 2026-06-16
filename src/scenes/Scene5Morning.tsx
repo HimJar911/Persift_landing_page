@@ -36,101 +36,73 @@ function StatCard({ value, label, accent }: { value: string; label: string; acce
   )
 }
 
-const QUEUE = [
-  { company: "Figma", role: "Product Design Intern", match: 88, eta: "4 min" },
-  { company: "Notion", role: "SWE Intern", match: 85, eta: "8 min" },
-  { company: "Ramp", role: "Engineering Intern", match: 81, eta: "12 min" },
-]
-
-function CompanyBadge({ name }: { name: string }) {
-  return (
-    <span
-      style={{
-        width: 30,
-        height: 30,
-        flexShrink: 0,
-        borderRadius: 8,
-        background: "linear-gradient(150deg, #2a2118, #1a140d)",
-        border: "1px solid var(--line)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 13,
-        fontWeight: 700,
-        color: "var(--ink-soft)",
-        fontFamily: "var(--font-serif)",
-      }}
-    >
-      {name[0]}
-    </span>
-  )
-}
-
-function UpNext() {
+function NeedsYouSection() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span
-        style={{
+      <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+        <span style={{
           fontSize: 10.5,
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           color: "var(--ink-mute)",
-        }}
-      >
-        Up next today
-      </span>
-      <div
-        style={{
-          borderRadius: 12,
-          border: "1px solid var(--line)",
-          background: "rgba(255,255,255,0.02)",
-          overflow: "hidden",
-        }}
-      >
-        {QUEUE.map((q, i) => (
-          <div
-            key={q.company}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "7px 12px",
-              borderTop: i === 0 ? "none" : "1px solid var(--line)",
-            }}
-          >
-            <CompanyBadge name={q.company} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{q.company}</div>
-              <div style={{ fontSize: 11.5, color: "var(--ink-mute)" }}>{q.role}</div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-              <span style={{
-                fontSize: 11.5,
-                fontWeight: 600,
-                fontVariantNumeric: "tabular-nums",
-                color: q.match >= 90 ? "var(--green)" : "var(--amber-soft)",
-                background: q.match >= 90 ? "rgba(95,208,127,0.08)" : "rgba(240,163,65,0.08)",
-                border: `1px solid ${q.match >= 90 ? "rgba(95,208,127,0.2)" : "rgba(240,163,65,0.2)"}`,
-                borderRadius: 999,
-                padding: "2px 8px",
-              }}>
-                {q.match}%
-              </span>
-              <span style={{
-                fontSize: 11.5,
-                color: "var(--ink-mute)",
-                fontVariantNumeric: "tabular-nums",
-                whiteSpace: "nowrap",
-              }}>
-                applying in {q.eta}
-              </span>
-            </div>
+        }}>
+          Needs you
+        </span>
+        <span style={{
+          fontSize: 10,
+          fontWeight: 700,
+          color: "var(--amber)",
+          background: "rgba(240,163,65,0.12)",
+          border: "1px solid rgba(240,163,65,0.25)",
+          borderRadius: 999,
+          padding: "1px 7px",
+        }}>1</span>
+      </div>
+      <div style={{
+        borderRadius: 12,
+        border: "1px solid rgba(240,163,65,0.2)",
+        background: "rgba(240,163,65,0.04)",
+        padding: "12px 14px",
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+      }}>
+        <div style={{
+          width: 36,
+          height: 36,
+          borderRadius: 10,
+          background: "rgba(240,163,65,0.1)",
+          border: "1px solid rgba(240,163,65,0.2)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          fontSize: 16,
+        }}>
+          📋
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
+            Stripe · Software Engineer Intern
           </div>
-        ))}
+          <div style={{ fontSize: 11.5, color: "var(--ink-mute)", marginTop: 2 }}>
+            Online assessment received · complete to stay in consideration
+          </div>
+        </div>
+        <span style={{
+          fontSize: 11.5,
+          fontWeight: 600,
+          color: "var(--amber)",
+          whiteSpace: "nowrap",
+          flexShrink: 0,
+        }}>
+          Opens in app →
+        </span>
       </div>
     </div>
   )
 }
+
 
 export function Scene5Morning() {
   const p = useSceneProgress()
@@ -158,11 +130,24 @@ export function Scene5Morning() {
           y: headY,
           width: "100%",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 20,
           transformOrigin: "center",
           scale,
         }}
       >
+        {!isMobile && <h3 style={{
+          margin: 0,
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(26px, 3.5vw, 42px)",
+          letterSpacing: "-0.025em",
+          color: "var(--ink)",
+          textAlign: "center",
+        }}>
+          Check your phone.
+        </h3>}
         <BrowserWindow url="app.persift.app/dashboard" width="90vw" maxWidth={1040}>
           <DashboardShell activeTab="overview" tone="dawn" embedded>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -240,8 +225,7 @@ export function Scene5Morning() {
               </div>
             </div>
 
-            {/* up next today — the live queue */}
-            <UpNext />
+            <NeedsYouSection />
           </div>
         </DashboardShell>
         </BrowserWindow>

@@ -1,5 +1,6 @@
 import { motion, useTransform } from "framer-motion"
 import { useSceneProgress } from "../scroll/SceneContext"
+import { LogoTicker } from "../components/LogoTicker"
 import deskImg from "../assets/desk.webp"
 
 const BG     = "#0c0a08"
@@ -14,14 +15,13 @@ const OX_PCT    = (SCREEN_L + SCREEN_W / 2) / IMG_W
 const OY_PCT    = (SCREEN_T + SCREEN_H / 2) / IMG_H
 const ZOOM_SCALE = IMG_W / SCREEN_W  // ≈ 3.04
 
-// within scene progress 0→1 (over 300vh):
-// 0.00 → 0.60  zoom in
-// 0.40 → 0.70  desk image fades out (screen takes over)
-// 0.60 → 0.80  terminal text fades out
-// 0.80 → 1.00  entire layer fades out (crossfade to Meet Persift)
-const ZOOM_END    = 0.60
-const IMG_FADE_E  = 0.75
-const COPY_FADE_E = 0.90
+// within scene progress 0→1 (over 100vh):
+// 0.00 → 0.70  zoom in
+// 0.45 → 0.82  desk image fades out (screen takes over)
+// 0.85 → 0.99  terminal text / screen fade out — held to scene end to avoid black gap
+const ZOOM_END    = 0.70
+const IMG_FADE_E  = 0.82
+const COPY_FADE_E = 0.99
 
 export function SceneHero() {
   const p = useSceneProgress()
@@ -29,9 +29,10 @@ export function SceneHero() {
   const scale        = useTransform(p, [0, ZOOM_END], [1, ZOOM_SCALE])
   const imgOpacity   = useTransform(p, [0, ZOOM_END * 0.65, IMG_FADE_E], [1, 1, 0])
   const screenRadius = useTransform(p, [0, ZOOM_END * 0.9], [6, 0])
-  const copyOpacity  = useTransform(p, [ZOOM_END - 0.05, COPY_FADE_E], [1, 0])
-  // fade the entire laptop screen (including green glow) out with the copy
-  const screenOpacity = useTransform(p, [ZOOM_END - 0.05, COPY_FADE_E], [1, 0])
+  const copyOpacity  = useTransform(p, [0.85, COPY_FADE_E], [1, 0])
+  const screenOpacity = useTransform(p, [0.85, COPY_FADE_E], [1, 0])
+  // ticker fades in early, stays visible through scene exit
+  const tickerOpacity = useTransform(p, [0, 0.08], [0, 1])
 
   return (
     <div style={{ position: "absolute", inset: 0, background: BG, overflow: "hidden" }}>
@@ -73,9 +74,9 @@ export function SceneHero() {
           containerType: "inline-size",
         }}>
           {/* solid fill that fades in as zoom progresses, covering any texture artifacts */}
-          <motion.div style={{ position: "absolute", inset: 0, background: "#060a08", zIndex: 1, opacity: useTransform(p, [0.25, 0.50], [0, 1]) }} />
+          <motion.div style={{ position: "absolute", inset: 0, background: "#060a08", zIndex: 1, opacity: useTransform(p, [0.40, 0.65], [0, 1]) }} />
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 60%, rgba(80,200,100,0.07) 0%, transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
-          <motion.div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.13) 2px, rgba(0,0,0,0.13) 4px)", pointerEvents: "none", zIndex: 2, opacity: useTransform(p, [0.20, 0.40], [1, 0]) }} />
+          <motion.div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.13) 2px, rgba(0,0,0,0.13) 4px)", pointerEvents: "none", zIndex: 2, opacity: useTransform(p, [0.35, 0.65], [1, 0]) }} />
           <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%)", pointerEvents: "none", zIndex: 3 }} />
           <motion.div style={{
             opacity: copyOpacity,
@@ -98,6 +99,35 @@ export function SceneHero() {
             </div>
           </motion.div>
         </motion.div>
+      </motion.div>
+
+      {/* ticker — bottom of hero, fades in at start, out before zoom */}
+      <motion.div style={{
+        opacity: tickerOpacity,
+        position: "absolute",
+        bottom: 48,
+        left: "50%",
+        x: "-50%",
+        width: "min(680px, 88vw)",
+        pointerEvents: "none",
+        zIndex: 10,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 12,
+      }}>
+        <p style={{
+          margin: 0,
+          fontFamily: "Inter, sans-serif",
+          fontSize: 11,
+          fontWeight: 500,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: "rgba(243,236,225,0.35)",
+        }}>
+          Roles discovered at
+        </p>
+        <LogoTicker />
       </motion.div>
 
       {/* side/bottom gradients */}

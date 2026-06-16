@@ -6,7 +6,9 @@ import { useEffect, useState } from "react"
  * their stacked, single-column mobile layouts.
  */
 export function useIsMobile(breakpoint = 640): boolean {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth <= breakpoint
+  )
 
   useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${breakpoint}px)`)

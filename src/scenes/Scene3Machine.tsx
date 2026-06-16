@@ -91,9 +91,9 @@ function Logo({ name }: { name: string }) {
 
 function DiscoveryCard({ mv }: { mv: MotionValue<number> }) {
   // internal motion so the beat never feels frozen during its hold
-  const fitWidth = useTransform(mv, [0.08, 0.24], ["0%", "100%"], { clamp: true })
-  const matchOpacity = useTransform(mv, [0.20, 0.28], [0, 1])
-  const linkedinOpacity = useTransform(mv, [0.24, 0.30], [0, 1])
+  const fitWidth = useTransform(mv, [0.06, 0.085], ["0%", "100%"], { clamp: true })
+  const matchOpacity = useTransform(mv, [0.075, 0.095], [0, 1])
+  const linkedinOpacity = useTransform(mv, [0.085, 0.105], [0, 1])
 
   return (
     <div
@@ -347,10 +347,10 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
 
   const ESSAY = company.essay
   const essayTyped = useTransform(fillMV, (f) => {
-    const t = Math.max(0, Math.min(1, (f - 0.62) / 0.38))
+    const t = Math.max(0, Math.min(1, (f - 0.52) / 0.43))
     return ESSAY.slice(0, Math.round(ESSAY.length * t))
   })
-  const essayCaretOpacity = useTransform(fillMV, (f) => (f >= 0.62 && f < 0.99 ? 1 : 0))
+  const essayCaretOpacity = useTransform(fillMV, (f) => (f >= 0.52 && f < 0.95 ? 1 : 0))
   const barWidth = useTransform(fillMV, (f) => `${Math.round(f * 100)}%`)
   const autofillDotOpacity = useTransform(fillMV, (f) => (f < 0.99 ? 1 : 0))
 
@@ -371,10 +371,10 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
     f >= 0.20 && f < 0.28 ? `0 0 0 3px ${style.accent}1f` : "none"
   )
   const essayBorder = useTransform(fillMV, (f) =>
-    f >= 0.62 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
+    f >= 0.52 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
   )
   const essayBoxShadow = useTransform(fillMV, (f) =>
-    f >= 0.62 && f < 0.99 ? `0 0 0 3px ${style.accent}1f` : "none"
+    f >= 0.52 && f < 0.95 ? `0 0 0 3px ${style.accent}1f` : "none"
   )
 
   return (
@@ -461,16 +461,16 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
               </motion.div>
             </div>
 
-            <TypedField label="Work authorization" value="U.S. Citizen or Permanent Resident" fillMV={fillMV} start={0.28} end={0.40} accent={style.accent} dark={dark} />
+            <TypedField label="Work authorization" value="U.S. Citizen or Permanent Resident" fillMV={fillMV} start={0.28} end={0.38} accent={style.accent} dark={dark} />
             <div style={{ display: "flex", gap: 10 }}>
               <div style={{ flex: 1 }}>
-                <TypedField label="Graduation date" value="May 2027" fillMV={fillMV} start={0.40} end={0.48} accent={style.accent} dark={dark} />
+                <TypedField label="Graduation date" value="May 2027" fillMV={fillMV} start={0.38} end={0.44} accent={style.accent} dark={dark} />
               </div>
               <div style={{ width: 92 }}>
-                <TypedField label="GPA" value="3.8" fillMV={fillMV} start={0.48} end={0.53} accent={style.accent} dark={dark} />
+                <TypedField label="GPA" value="3.8" fillMV={fillMV} start={0.44} end={0.48} accent={style.accent} dark={dark} />
               </div>
             </div>
-            <TypedField label="Portfolio / GitHub" value="github.com/jordanreyes" fillMV={fillMV} start={0.53} end={0.62} accent={style.accent} dark={dark} />
+            <TypedField label="Portfolio / GitHub" value="github.com/jordanreyes" fillMV={fillMV} start={0.48} end={0.52} accent={style.accent} dark={dark} />
 
             {/* essay */}
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -597,11 +597,11 @@ export function Scene3Machine() {
   const isMobile = useIsMobile(900)
   const { containerRef, contentRef, scale: fitScale } = useFitScale(24)
 
-  const discoveryOpacity = useTransform(p, [0, 0.05, 0.14, 0.22], [0, 1, 1, 0])
-  const workOpacity = useTransform(p, [0.18, 0.24, 0.88, 1.0], [0, 1, 1, 0])
+  const discoveryOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
+  const workOpacity = useTransform(p, [0.13, 0.18, 0.88, 0.94], [0, 1, 1, 0])
 
-  const APPLY_START = 0.22
-  const APPLY_END = 0.85
+  const APPLY_START = 0.18
+  const APPLY_END = 0.88
   const BAND = (APPLY_END - APPLY_START) / PIPELINE.length
 
   const rawIndex = useTransform(p, (v) =>
@@ -611,35 +611,35 @@ export function Scene3Machine() {
   const [current, setCurrent] = useState(0)
   useMotionValueEvent(rawIndex, "change", (v) => {
     const i = Math.min(PIPELINE.length - 1, Math.floor(v))
-    if (i !== current) setCurrent(i)
+    if (i !== current) requestAnimationFrame(() => setCurrent(i))
   })
 
   // needs-you toggles on near the end
   const [needsYou, setNeedsYou] = useState(false)
   useMotionValueEvent(p, "change", (v) => {
-    const on = v >= 0.86
-    if (on !== needsYou) setNeedsYou(on)
+    const on = v >= 0.89
+    if (on !== needsYou) requestAnimationFrame(() => setNeedsYou(on))
   })
 
   // frac: 0→1 within each company's slot, resets cleanly at every switch
   const frac = useTransform(rawIndex, (v) => v - Math.floor(v))
   const [phase, setPhase] = useState<"tailoring" | "filling">("tailoring")
   useMotionValueEvent(frac, "change", (f) => {
-    const next = f < 0.45 ? "tailoring" : "filling"
-    if (next !== phase) setPhase(next)
+    const next = f < 0.20 ? "tailoring" : "filling"
+    if (next !== phase) requestAnimationFrame(() => setPhase(next))
   })
-  // fillFrac: 0→1 during the filling phase — starts at 0.55 (after form is fully visible)
-  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.55) / 0.45)))
-  // mobile: popup fades out [0.25→0.50], form fades in [0.50→0.75], fill starts after 0.75
-  const popupOpacity = useTransform(frac, [0.25, 0.50], [1, 0])
-  const formOpacity  = useTransform(frac, [0.50, 0.75], [0, 1])
+  // fillFrac: 0→1 during the filling phase — starts at 0.25 (after quick tailoring)
+  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.25) / 0.75)))
+  // mobile: popup fades out [0.10→0.20], form fades in [0.20→0.30], fill starts after 0.30
+  const popupOpacity = useTransform(frac, [0.10, 0.20], [1, 0])
+  const formOpacity  = useTransform(frac, [0.20, 0.30], [0, 1])
   // company switch crossfade: fade out in last 8% of slot, fade in in first 8% of next slot
   // skip fade-out for the last company so there's no black gap before the next scene
   const companyCrossfade = useTransform(rawIndex, (v) => {
     const i = Math.floor(v)
     const f = v - i
     const isLast = i >= PIPELINE.length - 1
-    if (f < 0.08) return f / 0.08
+    if (f < 0.04) return f / 0.04
     if (!isLast && f > 0.96) return (1 - f) / 0.04
     return 1
   })
@@ -648,7 +648,7 @@ export function Scene3Machine() {
   const active = PIPELINE[current]
   const queue = PIPELINE.slice(current + 1)
 
-  const headlineOpacity = useTransform(p, [0, 0.05, 0.14, 0.22], [0, 1, 1, 0])
+  const headlineOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
