@@ -443,7 +443,7 @@ function MobileAnalytics() {
 
 function MobileCta() {
   return (
-    <section style={{ ...sectionStyle, borderBottom: "none" }}>
+    <section id="mobile-cta" style={{ ...sectionStyle, borderBottom: "none" }}>
       <div style={innerStyle}>
         {/* re-use Scene7Ask which is already static */}
         <div style={{ width: "100%", maxWidth: 440 }}>

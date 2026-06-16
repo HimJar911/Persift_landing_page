@@ -11,6 +11,7 @@ type Step = {
   fullBleed?: boolean   // bypasses nav column, fills entire sticky viewport
   noSlide?: boolean     // opacity-only transition, no y movement
   earlyEnter?: number   // start fading in this many global-progress units before band start
+  jumpOffset?: number   // fraction of the band to land at when jumping (0–1)
 }
 
 type MultiSceneProps = {
@@ -245,6 +246,7 @@ export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: M
   // The single source of truth for all scene rendering — replaces scrollYProgress
   const progress = useMotionValue(0)
   const targetRef = useRef(0)
+  const currentRef = useRef(0)
   const rafRef = useRef<number | null>(null)
 
   const bandsRef = useRef(bands)
@@ -252,15 +254,13 @@ export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: M
 
   // RAF lerp loop: runs continuously while mounted, chases targetRef
   useEffect(() => {
-    let current = 0
-
     function tick() {
       const target = targetRef.current
-      const diff = target - current
+      const diff = target - currentRef.current
       // stop updating when close enough to avoid thrashing
       if (Math.abs(diff) > 0.00001) {
-        current += diff * 0.09
-        progress.set(current)
+        currentRef.current += diff * 0.09
+        progress.set(currentRef.current)
       }
       rafRef.current = requestAnimationFrame(tick)
     }
@@ -314,10 +314,14 @@ export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: M
     return 0
   })
 
-  function jumpToStep(i: number) {
-    const target = bandsRef.current[i].start
-    // Snap target and current together so lerp doesn't animate across the full page
+  function jumpToStep(i: number, bandOffset = 0) {
+    const band = bandsRef.current[i]
+    const bandSize = band.end - band.start
+    const target = bandOffset > 0
+      ? band.start + bandOffset * bandSize
+      : band.start + FADE * 2
     targetRef.current = target
+    currentRef.current = target
     progress.set(target)
   }
 
@@ -365,7 +369,7 @@ export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: M
                     description={step.description}
                     index={i}
                     activeIndex={activeIndex}
-                    onJump={() => jumpToStep(i)}
+                    onJump={() => jumpToStep(i, step.jumpOffset)}
                     isCtaStep={i === lastLabeledIndex}
                   />
                 </div>

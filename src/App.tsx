@@ -131,7 +131,7 @@ export default function App() {
           steps={[
             { label: "", description: "", scrollHeight: "65vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },
             { label: "Install",   description: "One click from the Chrome Web Store.",    scrollHeight: "120vh", noSlide: true, children: <Scene2Install /> },
-            { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "86vh", children: <Scene2Setup /> },
+            { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "86vh", jumpOffset: 0.13, children: <Scene2Setup /> },
             { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "940vh", children: <Scene3Machine /> },
             { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "150vh", earlyEnter: 0.04, children: <Scene4Overnight /> },
             { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "100vh", children: <Scene5Morning /> },
