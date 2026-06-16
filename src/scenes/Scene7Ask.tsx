@@ -137,7 +137,7 @@ export function Scene7Ask() {
             textAlign: "center",
             lineHeight: 1.5,
           }}>
-            You're in. Confirmation sent to <strong>{submittedEmail}</strong> — if you don't see it, check your promotions tab.
+            You're in. Confirmation sent to <strong>{submittedEmail}</strong> — if you don't see it, check your promotions tab and move it to Primary.
           </div>
         ) : (
           <>
