@@ -93,9 +93,7 @@ Reply to this email if you have questions.`
     await resend.emails.send({
       headers: {
         "X-Entity-Ref-ID": email,
-        "X-Priority": "1",
-        "List-Unsubscribe": `<mailto:hjarodiy@asu.edu?subject=Unsubscribe>`,
-        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        "Precedence": "transactional",
       },
       from: "Himanshu at Persift <himanshu@persift.com>",
       replyTo: "hjarodiy@asu.edu",
