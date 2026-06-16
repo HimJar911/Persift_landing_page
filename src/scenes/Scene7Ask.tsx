@@ -137,7 +137,7 @@ export function Scene7Ask() {
             textAlign: "center",
             lineHeight: 1.5,
           }}>
-            You're on the list at <strong>{submittedEmail}</strong>. Check your email for your referral link.
+            You're in. Check your email at <strong>{submittedEmail}</strong> for confirmation.
           </div>
         ) : (
           <>

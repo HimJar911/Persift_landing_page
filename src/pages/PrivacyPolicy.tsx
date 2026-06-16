@@ -40,7 +40,7 @@ export function PrivacyPolicy() {
 
         <Section title="What we collect">
           <Subsection title="Waitlist sign-up">
-            <p>When you join the waitlist at persift.com we collect your <strong>email address</strong> and, if provided, the referral code of the person who invited you. We do not collect your name or any other personal information at this stage.</p>
+            <p>When you sign up at persift.com we collect your <strong>email address</strong>. We do not collect your name or any other personal information at this stage.</p>
           </Subsection>
           <Subsection title="Extension usage (private beta)">
             <p>Once you have access to the Persift extension, it reads job listing pages you visit (Ashby, Greenhouse, Lever) to identify fields and populate your application. The data used to fill applications — resume, name, contact details, and essay responses — is information you provide to Persift and is stored locally in your browser's extension storage.</p>
@@ -53,9 +53,8 @@ export function PrivacyPolicy() {
 
         <Section title="How we use your data">
           <ul>
-            <li>To send you a confirmation email and referral link when you join the waitlist.</li>
+            <li>To send you a confirmation email when you sign up.</li>
             <li>To notify you when the private beta opens.</li>
-            <li>To notify referrers when someone uses their link.</li>
             <li>To prevent abuse (rate limiting by IP address).</li>
           </ul>
           <p>We do not use your email for marketing beyond the above. We do not sell your data to any third party.</p>
@@ -71,7 +70,7 @@ export function PrivacyPolicy() {
               <tbody>
                 <tr><td>Resend</td><td>Transactional email</td><td>Email address</td></tr>
                 <tr><td>LaunchList</td><td>Waitlist management</td><td>Email address</td></tr>
-                <tr><td>Upstash Redis</td><td>Rate limiting + referral tracking</td><td>Hashed IP, email</td></tr>
+                <tr><td>Upstash Redis</td><td>Rate limiting</td><td>Hashed IP</td></tr>
                 <tr><td>Vercel</td><td>Hosting and serverless functions</td><td>IP address, request metadata</td></tr>
               </tbody>
             </table>
@@ -80,7 +79,7 @@ export function PrivacyPolicy() {
         </Section>
 
         <Section title="Data retention">
-          <p>Waitlist email addresses are retained until you request deletion or Persift is discontinued. Rate-limit records are automatically purged after 1 hour. Referral codes are retained for the lifetime of the waitlist.</p>
+          <p>Email addresses are retained until you request deletion or Persift is discontinued. Rate-limit records are automatically purged after 1 hour.</p>
         </Section>
 
         <Section title="Your rights">
