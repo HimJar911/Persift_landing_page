@@ -51,6 +51,7 @@ export default function App() {
         justifyContent: "space-between",
         padding: "0 32px",
         zIndex: 110,
+        background: "linear-gradient(to bottom, var(--bg) 60%, transparent)",
       }}>
         <a href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
           <Wordmark height={30} />
