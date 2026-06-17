@@ -82,21 +82,45 @@ export function SceneHero() {
             opacity: copyOpacity,
             position: "absolute", inset: 0, zIndex: 4,
             display: "flex", flexDirection: "column",
-            alignItems: "flex-start", justifyContent: "center",
-            padding: "12% 14%",
+            alignItems: "flex-start", justifyContent: "space-between",
+            padding: "22% 14% 8%",
             pointerEvents: "none",
           }}>
-            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.55)", letterSpacing: "0.02em", lineHeight: 1.8, whiteSpace: "nowrap" }}>
-              $ status --job-search
-            </p>
-            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.38)", letterSpacing: "0.02em", lineHeight: 1.8, marginBottom: "3.4cqw", whiteSpace: "nowrap" }}>
-              &gt; 247 applications. 0 replies. Tired yet?
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.9cqw" }}>
+            {/* problem block — top */}
+            <div style={{ marginBottom: "3.2cqw" }}>
+              <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.52)", letterSpacing: "0.02em", lineHeight: 1.8, whiteSpace: "nowrap" }}>
+                $ status --job-search
+              </p>
+              <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.4cqw", fontWeight: 500, color: "rgba(160,220,170,0.82)", letterSpacing: "0.02em", lineHeight: 1.8, whiteSpace: "nowrap" }}>
+                &gt; 247 applications. 0 replies. Tired yet?
+              </p>
+            </div>
+            {/* claim */}
+            <div style={{ display: "flex", alignItems: "center" }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "4.1cqw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
                 Persift can change that.
               </span>
             </div>
+            {/* scroll hint — centered, pinned near bottom */}
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              style={{ margin: 0, marginTop: "auto", marginBottom: "5cqw", alignSelf: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.7cqw" }}
+            >
+              <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "1.9cqw", fontWeight: 400, color: "rgba(240,163,65,0.55)", letterSpacing: "0.02em", lineHeight: 1, whiteSpace: "nowrap" }}>
+                scroll to see it in action
+              </p>
+              <svg viewBox="0 0 24 38" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "3.5cqw", height: "auto", opacity: 0.5 }}>
+                <rect x="1" y="1" width="22" height="30" rx="11" stroke="rgba(240,163,65,0.7)" strokeWidth="2"/>
+                <motion.rect
+                  x="10.5" y="6" width="3" height="6" rx="1.5"
+                  fill="rgba(240,163,65,0.9)"
+                  animate={{ y: [0, 5, 0] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <path d="M8 35l4 4 4-4" stroke="rgba(240,163,65,0.5)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </motion.div>
           </motion.div>
         </motion.div>
       </motion.div>

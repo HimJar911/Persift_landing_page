@@ -33,18 +33,21 @@ All pending/done work lives in `.claude/IMPROVEMENTS.md`. Read that first every 
 - **Hero terminal copy** — `$ persift --start` changed to `Persift can change that.` (amber, same Roboto Mono style). Non-technical, direct response to "247 applications. 0 replies. Tired yet?"
 - **Viewport meta** — added `maximum-scale=1.0` to prevent mobile zoom-out.
 
-### Current state of hero terminal (`SceneHero.tsx` lines 89-99)
+### Current state of hero terminal (`SceneHero.tsx` lines 89-103)
 ```
-$ status --job-search          ← green mono, muted
-> 247 applications. 0 replies. Tired yet?  ← green mono, more muted
-                               ← gap
+$ status --job-search          ← green mono, muted (rgba 160,220,170,0.55)
+> 247 applications. 0 replies. Tired yet?  ← green mono, more muted (0.38)
+                               ← gap (marginBottom 3.4cqw)
 Persift can change that.       ← amber, large, Roboto Mono 500
+scroll to see it in action     ← green mono, 1.8cqw, muted (0.45), marginTop 2.2cqw
 ```
 
 ### Open / next to tackle
-- **"Scroll to see how it works" line in terminal** — still undecided. User wants a line below "Persift can change that." that hints the page is a product demo without sounding like a disclaimer. In the same terminal aesthetic (Roboto Mono, small, muted green) but plain English. Not yet implemented — discuss wording with user first.
 - **Mobile hero demo awareness** — mobile hero has no demo framing at all. Desktop has the terminal copy. Mobile users may not understand the page is a product demo. No solution decided yet.
-- **`color-test.html` and `roles-color-test.html`** — scratch files in repo root, can be deleted.
+
+### Completed (prior sessions)
+- **"scroll to see it in action"** — added below "Persift can change that." in terminal. Roboto Mono, 1.8cqw, muted green `rgba(160,220,170,0.45)`, `marginTop: "2.2cqw"`.
+- **`color-test.html` and `roles-color-test.html`** — deleted.
 
 ---
 
@@ -76,8 +79,8 @@ Never pass raw `scrollYProgress` directly to `useTransform`. Always use a mirror
 | 0 | (Hero) | SceneHero.tsx | 65vh | fullBleed, noSlide, isFirst |
 | 1 | Install | Scene2Install.tsx | 120vh | noSlide |
 | 2 | Set up | Scene2Setup.tsx | 86vh | jumpOffset: 0.13 |
-| 3 | Discover | Scene3Machine.tsx | 940vh | |
-| 4 | Autopilot | Scene4Overnight.tsx | 150vh | earlyEnter: 0.04 |
+| 3 | Discover | Scene3Machine.tsx | 125vh | Stripe only, 3 beats |
+| 4 | Autopilot | Scene4Overnight.tsx | 150vh | |
 | 5 | Morning | Scene5Morning.tsx | 100vh | |
 | 6 | Analytics | Scene6Analytics.tsx | 100vh | |
 | 7 | Launch | Scene7Ask.tsx | 150vh | CTA, isLast |
@@ -127,13 +130,18 @@ Autopilot uses `earlyEnter: 0.04` — shifts `enterStart = bandStart - 0.04` so 
 
 ## Key Scene Notes
 
-### Scene3Machine.tsx (Discover, 940vh)
-- Pipeline: Stripe → Anthropic → Figma
-- `APPLY_START = 0.44`, `APPLY_END = 0.72`, `BAND = 0.0933`
-- `rawIndex` uses `Math.floor` (not Math.round) — avoids mid-fill company switches
-- `fillFrac` threshold 0.15: `Math.max(0, Math.min(1, (f - 0.15) / 0.85))`
-- `needsYou` triggers at p >= 0.73
+### Scene3Machine.tsx (Discover, 125vh)
+- Single company: Stripe only (Anthropic + Figma removed)
+- `APPLY_START = 0.18`, `APPLY_END = 1.0`
+- `frac = (p - 0.18) / 0.82` — position within apply sequence
+- Phase switch tailoring→filling at `frac = 0.07`
+- `fillFrac = (frac - 0.09) / 0.91` — autofill animation 0→1
+- Field windows (fillFrac): name [0→0.07], email [0.07→0.14], resume [0.14→0.20], work auth [0.20→0.28], grad [0.28→0.32], GPA [0.32→0.36], portfolio [0.36→0.38], essay [0.38→0.93]
+- Essay ends at fillFrac=0.93 → small beat before scene transition at frac=0.97
+- Three headers, all top: 40 — discovery (`p [0,0.04,0.11,0.16]`), tailoring (`p [0.13,0.18,0.21,0.25]`), filling (`frac [0.07,0.12,0.97,1.0]`)
+- `needsYou` removed — no longer cycles to Figma
 - All `setState` calls in `useMotionValueEvent` wrapped in `requestAnimationFrame()` to prevent React setState-during-render warning
+- Autopilot `earlyEnter` removed — was causing bleed-in overlap
 
 ### Scene4Overnight.tsx (Autopilot, 150vh)
 - 5 companies, `foundIdx`/`tailoredIdx`/`submittedIdx` into 12-entry TIMES array (ends at "02:27 AM")

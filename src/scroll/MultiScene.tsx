@@ -258,8 +258,12 @@ export function MultiScene({ steps, topOffset = 0, onReady, onScrollByReady, onP
     function tick() {
       const target = targetRef.current
       const diff = target - currentRef.current
-      // stop updating when close enough to avoid thrashing
-      if (Math.abs(diff) > 0.00001) {
+      if (Math.abs(diff) < 0.0005) {
+        if (currentRef.current !== target) {
+          currentRef.current = target
+          progress.set(target)
+        }
+      } else {
         currentRef.current += diff * 0.09
         progress.set(currentRef.current)
       }

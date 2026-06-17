@@ -41,6 +41,17 @@ export function MobileHero() {
         </p>
       </div>
 
+      <p style={{
+        margin: 0,
+        fontFamily: "Inter, sans-serif",
+        fontSize: "clamp(13px, 3.5vw, 15px)",
+        fontWeight: 400,
+        color: "var(--ink-mute)",
+        letterSpacing: "0.01em",
+      }}>
+        ↓ See exactly how it works
+      </p>
+
       <button
         onClick={jumpToCtaScene}
         style={{

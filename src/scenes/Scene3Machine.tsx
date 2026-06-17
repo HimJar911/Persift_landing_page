@@ -347,10 +347,10 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
 
   const ESSAY = company.essay
   const essayTyped = useTransform(fillMV, (f) => {
-    const t = Math.max(0, Math.min(1, (f - 0.52) / 0.43))
+    const t = Math.max(0, Math.min(1, (f - 0.38) / 0.55))
     return ESSAY.slice(0, Math.round(ESSAY.length * t))
   })
-  const essayCaretOpacity = useTransform(fillMV, (f) => (f >= 0.52 && f < 0.95 ? 1 : 0))
+  const essayCaretOpacity = useTransform(fillMV, (f) => (f >= 0.38 && f < 0.93 ? 1 : 0))
   const barWidth = useTransform(fillMV, (f) => `${Math.round(f * 100)}%`)
   const autofillDotOpacity = useTransform(fillMV, (f) => (f < 0.99 ? 1 : 0))
 
@@ -360,21 +360,21 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
 
   const resumeFilename = `resume_${company.name.toLowerCase()}_tailored.pdf`
   const resumeTyped = useTransform(fillMV, (f) => {
-    const t = Math.max(0, Math.min(1, (f - 0.20) / 0.08))
+    const t = Math.max(0, Math.min(1, (f - 0.14) / 0.06))
     return resumeFilename.slice(0, Math.round(resumeFilename.length * t))
   })
-  const resumeDone = useTransform(fillMV, (f) => f >= 0.28 ? 1 : 0)
+  const resumeDone = useTransform(fillMV, (f) => f >= 0.20 ? 1 : 0)
   const resumeBorder = useTransform(fillMV, (f) =>
-    f >= 0.20 && f < 0.28 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
+    f >= 0.14 && f < 0.20 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
   )
   const resumeBoxShadow = useTransform(fillMV, (f) =>
-    f >= 0.20 && f < 0.28 ? `0 0 0 3px ${style.accent}1f` : "none"
+    f >= 0.14 && f < 0.20 ? `0 0 0 3px ${style.accent}1f` : "none"
   )
   const essayBorder = useTransform(fillMV, (f) =>
-    f >= 0.52 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
+    f >= 0.38 ? `1.5px solid ${style.accent}` : `1px solid ${fieldBorder}`
   )
   const essayBoxShadow = useTransform(fillMV, (f) =>
-    f >= 0.52 && f < 0.95 ? `0 0 0 3px ${style.accent}1f` : "none"
+    f >= 0.38 && f < 1.0 ? `0 0 0 3px ${style.accent}1f` : "none"
   )
 
   return (
@@ -430,8 +430,8 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
           </div>
         ) : (
           <>
-            <TypedField label="Full name" value="Jordan Reyes" fillMV={fillMV} start={0.00} end={0.10} accent={style.accent} dark={dark} />
-            <TypedField label="Email" value="jordan.reyes@berkeley.edu" fillMV={fillMV} start={0.10} end={0.20} accent={style.accent} dark={dark} />
+            <TypedField label="Full name" value="Jordan Reyes" fillMV={fillMV} start={0.00} end={0.07} accent={style.accent} dark={dark} />
+            <TypedField label="Email" value="jordan.reyes@berkeley.edu" fillMV={fillMV} start={0.07} end={0.14} accent={style.accent} dark={dark} />
 
             {/* resume */}
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -461,16 +461,16 @@ function ApplicationForm({ company, fillMV, phase }: { company: Company; fillMV:
               </motion.div>
             </div>
 
-            <TypedField label="Work authorization" value="U.S. Citizen or Permanent Resident" fillMV={fillMV} start={0.28} end={0.38} accent={style.accent} dark={dark} />
+            <TypedField label="Work authorization" value="U.S. Citizen or Permanent Resident" fillMV={fillMV} start={0.20} end={0.28} accent={style.accent} dark={dark} />
             <div style={{ display: "flex", gap: 10 }}>
               <div style={{ flex: 1 }}>
-                <TypedField label="Graduation date" value="May 2027" fillMV={fillMV} start={0.38} end={0.44} accent={style.accent} dark={dark} />
+                <TypedField label="Graduation date" value="May 2027" fillMV={fillMV} start={0.28} end={0.32} accent={style.accent} dark={dark} />
               </div>
               <div style={{ width: 92 }}>
-                <TypedField label="GPA" value="3.8" fillMV={fillMV} start={0.44} end={0.48} accent={style.accent} dark={dark} />
+                <TypedField label="GPA" value="3.8" fillMV={fillMV} start={0.32} end={0.36} accent={style.accent} dark={dark} />
               </div>
             </div>
-            <TypedField label="Portfolio / GitHub" value="github.com/jordanreyes" fillMV={fillMV} start={0.48} end={0.52} accent={style.accent} dark={dark} />
+            <TypedField label="Portfolio / GitHub" value="github.com/jordanreyes" fillMV={fillMV} start={0.36} end={0.38} accent={style.accent} dark={dark} />
 
             {/* essay */}
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -598,118 +598,75 @@ export function Scene3Machine() {
   const { containerRef, contentRef, scale: fitScale } = useFitScale(24)
 
   const discoveryOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
-  const workOpacity = useTransform(p, [0.13, 0.18, 0.88, 0.94], [0, 1, 1, 0])
+  const workOpacity = useTransform(p, [0.13, 0.18, 0.96, 1.0], [0, 1, 1, 0])
 
   const APPLY_START = 0.18
-  const APPLY_END = 0.88
-  const BAND = (APPLY_END - APPLY_START) / PIPELINE.length
+  const APPLY_END = 1.0
 
-  const rawIndex = useTransform(p, (v) =>
-    Math.max(0, Math.min(PIPELINE.length - 0.001, (v - APPLY_START) / BAND))
+  // only Stripe — single company slot
+  const frac = useTransform(p, (v) =>
+    Math.max(0, Math.min(1, (v - APPLY_START) / (APPLY_END - APPLY_START)))
   )
 
-  const [current, setCurrent] = useState(0)
-  useMotionValueEvent(rawIndex, "change", (v) => {
-    const i = Math.min(PIPELINE.length - 1, Math.floor(v))
-    if (i !== current) requestAnimationFrame(() => setCurrent(i))
-  })
-
-  // needs-you toggles on near the end
-  const [needsYou, setNeedsYou] = useState(false)
-  useMotionValueEvent(p, "change", (v) => {
-    const on = v >= 0.89
-    if (on !== needsYou) requestAnimationFrame(() => setNeedsYou(on))
-  })
-
-  // frac: 0→1 within each company's slot, resets cleanly at every switch
-  const frac = useTransform(rawIndex, (v) => v - Math.floor(v))
   const [phase, setPhase] = useState<"tailoring" | "filling">("tailoring")
   useMotionValueEvent(frac, "change", (f) => {
-    const next = f < 0.20 ? "tailoring" : "filling"
+    const next = f < 0.07 ? "tailoring" : "filling"
     if (next !== phase) requestAnimationFrame(() => setPhase(next))
   })
-  // fillFrac: 0→1 during the filling phase — starts at 0.25 (after quick tailoring)
-  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.25) / 0.75)))
-  // mobile: popup fades out [0.10→0.20], form fades in [0.20→0.30], fill starts after 0.30
-  const popupOpacity = useTransform(frac, [0.10, 0.20], [1, 0])
-  const formOpacity  = useTransform(frac, [0.20, 0.30], [0, 1])
-  // company switch crossfade: fade out in last 8% of slot, fade in in first 8% of next slot
-  // skip fade-out for the last company so there's no black gap before the next scene
-  const companyCrossfade = useTransform(rawIndex, (v) => {
-    const i = Math.floor(v)
-    const f = v - i
-    const isLast = i >= PIPELINE.length - 1
-    if (f < 0.04) return f / 0.04
-    if (!isLast && f > 0.96) return (1 - f) / 0.04
-    return 1
-  })
+  // fillFrac: 0→1 during the filling phase
+  const fillFrac = useTransform(frac, (f) => Math.max(0, Math.min(1, (f - 0.09) / 0.91)))
+  // mobile: popup fades out [0.04→0.07], form fades in [0.07→0.14]
+  const popupOpacity = useTransform(frac, [0.04, 0.07], [1, 0])
+  const formOpacity  = useTransform(frac, [0.07, 0.14], [0, 1])
   const fill = useTransform(fillFrac, (f) => `${Math.round(f * 100)}%`)
 
-  const active = PIPELINE[current]
-  const queue = PIPELINE.slice(current + 1)
+  const active = PIPELINE[0]
+  const queue: Company[] = []
 
-  const headlineOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
+  const discoveryHeaderOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
+  const tailoringHeaderOpacity = useTransform(p, [0.13, 0.18, 0.21, 0.25], [0, 1, 1, 0])
+  const fillingHeaderOpacity   = useTransform(frac, [0.07, 0.12, 0.97, 1.0], [0, 1, 1, 0])
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {/* floating headline — visible during discovery beat */}
-      <motion.div style={{
-        opacity: headlineOpacity,
-        position: "absolute",
-        top: 40,
-        left: 0, right: 0,
-        textAlign: "center",
-        pointerEvents: "none",
-        padding: "0 24px",
-      }}>
-        <h3 style={{
-          margin: "0 0 6px",
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
-          fontWeight: 800,
-          fontSize: "clamp(26px, 3.5vw, 42px)",
-          letterSpacing: "-0.025em",
-          color: "var(--ink)",
-        }}>
-          It finds them. It applies.
+      {/* beat 1 header — discovery */}
+      <motion.div style={{ opacity: discoveryHeaderOpacity, position: "absolute", top: 40, left: 0, right: 0, textAlign: "center", pointerEvents: "none", padding: "0 24px" }}>
+        <h3 style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "clamp(26px, 3.5vw, 42px)", letterSpacing: "-0.025em", color: "var(--ink)" }}>
+          First to know.
         </h3>
-        <p style={{
-          margin: 0,
-          fontFamily: "Inter, sans-serif",
-          fontWeight: 400,
-          fontSize: "clamp(13px, 1.3vw, 16px)",
-          color: "var(--ink-soft)",
-        }}>
-          While you&apos;re in class, asleep, or anywhere else.
-        </p>
       </motion.div>
 
       {/* opening discovery beat */}
-      <motion.div
-        style={{
-          opacity: discoveryOpacity,
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 24px",
-        }}
-      >
+      <motion.div style={{ opacity: discoveryOpacity, position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 24px" }}>
         <DiscoveryCard mv={p} />
+      </motion.div>
+
+      {/* beat 2 header — tailoring */}
+      <motion.div style={{ opacity: tailoringHeaderOpacity, position: "absolute", top: 40, left: 0, right: 0, textAlign: "center", pointerEvents: "none", padding: "0 24px" }}>
+        <h3 style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "clamp(26px, 3.5vw, 42px)", letterSpacing: "-0.025em", color: "var(--ink)" }}>
+          Custom resume. In seconds.
+        </h3>
+      </motion.div>
+
+      {/* beat 3 header — autofill */}
+      <motion.div style={{ opacity: fillingHeaderOpacity, position: "absolute", top: 40, left: 0, right: 0, textAlign: "center", pointerEvents: "none", padding: "0 24px" }}>
+        <h3 style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: "clamp(26px, 3.5vw, 42px)", letterSpacing: "-0.025em", color: "var(--ink)" }}>
+          Every field. Handled.
+        </h3>
       </motion.div>
 
       {/* the working split-screen */}
       <motion.div
         ref={contentRef}
         style={{
-          opacity: useTransform([workOpacity, companyCrossfade], ([w, c]) => (w as number) * (c as number)),
+          opacity: workOpacity,
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
           justifyContent: "center",
           gap: isMobile ? 14 : 34,
           flexWrap: isMobile ? "nowrap" : "wrap",
-          padding: isMobile ? "0 16px" : "0 28px",
+          padding: isMobile ? "0 16px" : "60px 28px 0",
           width: "100%",
           scale: fitScale,
           transformOrigin: "center",
@@ -720,63 +677,11 @@ export function Scene3Machine() {
           <div style={{ position: "relative", width: "100%", display: "flex", justifyContent: "center", minHeight: 520 }}>
             {/* popup — fades out as form fades in */}
             <motion.div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", opacity: popupOpacity, pointerEvents: phase === "tailoring" ? "auto" : "none", width: "100%", display: "flex", justifyContent: "center" }}>
-              {needsYou ? (
-                <ExtensionPopup status="applying" statusLabel="Needs you" toggleOn footnote="Auto-apply" width={340}>
-                  <NeedsYouBody />
-                </ExtensionPopup>
-              ) : (
-                <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={340}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                    <div>
-                      <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
-                        Tailoring resume for
-                      </span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 9 }}>
-                        <Logo name={active.name} />
-                        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{active.name}</span>
-                          <span style={{ fontSize: 12, color: "var(--ink-mute)" }}>{active.role}</span>
-                        </div>
-                      </div>
-                      <div style={{ marginTop: 12, height: 5, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
-                        <motion.div style={{ height: "100%", width: fill, borderRadius: 999, background: "linear-gradient(90deg, var(--amber-deep), var(--amber-soft))" }} />
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                      <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-faint)" }}>Next in line</span>
-                      {queue.length === 0 && <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>}
-                      {queue.map((c) => (
-                        <div key={c.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                            <Logo name={c.name} />
-                            <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>{c.name}</span>
-                          </div>
-                          <span style={{ fontSize: 12, color: "var(--amber-soft)", fontWeight: 600 }}>{c.match}% match</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </ExtensionPopup>
-              )}
-            </motion.div>
-
-            {/* form — fades in as popup fades out, always rendered as "filling" */}
-            <motion.div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", opacity: formOpacity, pointerEvents: phase === "filling" ? "auto" : "none", width: "100%", display: "flex", justifyContent: "center" }}>
-              <ApplicationForm company={active} fillMV={fillFrac} phase="filling" />
-            </motion.div>
-          </div>
-        ) : (
-          <>
-            {needsYou ? (
-              <ExtensionPopup status="applying" statusLabel="Needs you" toggleOn footnote="Auto-apply" width={340}>
-                <NeedsYouBody />
-              </ExtensionPopup>
-            ) : (
               <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={340}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <div>
                     <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
-                      {phase === "tailoring" ? "Tailoring resume for" : "Currently applying to"}
+                      Tailoring resume for
                     </span>
                     <div style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 9 }}>
                       <Logo name={active.name} />
@@ -791,20 +696,42 @@ export function Scene3Machine() {
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-faint)" }}>Next in line</span>
-                    {queue.length === 0 && <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>}
-                    {queue.map((c) => (
-                      <div key={c.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                          <Logo name={c.name} />
-                          <span style={{ fontSize: 13, color: "var(--ink-soft)" }}>{c.name}</span>
-                        </div>
-                        <span style={{ fontSize: 12, color: "var(--amber-soft)", fontWeight: 600 }}>{c.match}% match</span>
-                      </div>
-                    ))}
+                    <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>
                   </div>
                 </div>
               </ExtensionPopup>
-            )}
+            </motion.div>
+
+            {/* form — fades in as popup fades out, always rendered as "filling" */}
+            <motion.div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", opacity: formOpacity, pointerEvents: phase === "filling" ? "auto" : "none", width: "100%", display: "flex", justifyContent: "center" }}>
+              <ApplicationForm company={active} fillMV={fillFrac} phase="filling" />
+            </motion.div>
+          </div>
+        ) : (
+          <>
+            <ExtensionPopup status="applying" statusLabel="Applying" toggleOn footnote="Auto-apply" width={340}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <div>
+                  <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-mute)" }}>
+                    {phase === "tailoring" ? "Tailoring resume for" : "Currently applying to"}
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 9 }}>
+                    <Logo name={active.name} />
+                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{active.name}</span>
+                      <span style={{ fontSize: 12, color: "var(--ink-mute)" }}>{active.role}</span>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: 12, height: 5, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
+                    <motion.div style={{ height: "100%", width: fill, borderRadius: 999, background: "linear-gradient(90deg, var(--amber-deep), var(--amber-soft))" }} />
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <span style={{ fontSize: 10.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-faint)" }}>Next in line</span>
+                  <span style={{ fontSize: 12.5, color: "var(--ink-mute)" }}>Queue complete.</span>
+                </div>
+              </div>
+            </ExtensionPopup>
 
             {/* connective beam */}
             <div aria-hidden="true" style={{ width: 40, height: 2, background: "linear-gradient(90deg, var(--amber-soft), transparent)", alignSelf: "center", opacity: 0.6 }} />
