@@ -176,7 +176,7 @@ export function Scene7Ask() {
                   if (status === "error") setStatus("idle")
                   if (showAlreadyBanner) setShowAlreadyBanner(false)
                 }}
-                placeholder="you@university.edu"
+                placeholder="you@email.com"
                 aria-label="Email address"
                 aria-invalid={status === "error"}
                 aria-describedby={status === "error" ? "waitlist-error" : undefined}
