@@ -421,7 +421,7 @@ function MobileOvernight() {
 
 function MobileMorning() {
   return (
-    <section style={{ ...sectionStyle, minHeight: "80vh" }}>
+    <section style={sectionStyle}>
       <div style={{ textAlign: "center", marginBottom: 24 }}>
         <h2 style={{ ...h2Style, margin: 0 }}>Check your phone.</h2>
       </div>
@@ -432,7 +432,7 @@ function MobileMorning() {
 
 function MobileAnalytics() {
   return (
-    <section style={{ ...sectionStyle, minHeight: "80vh" }}>
+    <section style={sectionStyle}>
       <div style={{ textAlign: "center", marginBottom: 24 }}>
         <h2 style={{ ...h2Style, margin: 0 }}>See what's working.</h2>
       </div>
