@@ -103,7 +103,7 @@ export default function App() {
           fontWeight: 500,
           letterSpacing: "0.18em",
           textTransform: "uppercase",
-          color: "rgba(243,236,225,0.35)",
+          color: "#f0a341",
           textShadow: "0 1px 0 rgba(0,0,0,0.9), 0 -1px 0 rgba(255,255,255,0.18)",
         }}>
           scroll

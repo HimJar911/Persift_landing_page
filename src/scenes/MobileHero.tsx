@@ -66,7 +66,7 @@ export function MobileHero() {
           fontWeight: 500,
           letterSpacing: "0.1em",
           textTransform: "uppercase",
-          color: "var(--ink-mute)",
+          color: "var(--amber-soft)",
           textShadow: "0 1px 0 rgba(0,0,0,0.9), 0 -1px 0 rgba(255,255,255,0.18)",
         }}>
           Roles discovered at
