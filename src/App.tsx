@@ -1,3 +1,4 @@
+import { useRef } from "react"
 import { motion, useMotionValue, useTransform, type MotionValue } from "framer-motion"
 import { MultiScene } from "./scroll/MultiScene"
 import { MobileLayout } from "./scroll/MobileLayout"
@@ -20,6 +21,7 @@ export default function App() {
 
   // progress is wired directly from MultiScene's wheel interceptor via onProgressReady
   const progress = useMotionValue(0)
+  const scrollByRef = useRef<((amount: number) => void) | null>(null)
 
   const barScale = useTransform(progress, [0, 1], [0, 1])
   const scrollHintOpacity = useTransform(progress, [0, 0.03, 0.06, 0.91, 0.94], [1, 0, 1, 1, 0])
@@ -76,7 +78,7 @@ export default function App() {
 
       {/* scroll hint — desktop only */}
       <motion.div
-        onClick={() => window.dispatchEvent(new WheelEvent("wheel", { deltaY: 24000, bubbles: true, cancelable: true }))}
+        onClick={() => scrollByRef.current?.(0.06)}
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         style={{
@@ -132,6 +134,7 @@ export default function App() {
         <MultiScene
           topOffset={HEADER_H}
           onReady={registerJumpToStep}
+          onScrollByReady={(fn) => { scrollByRef.current = fn }}
           onProgressReady={handleProgressReady}
           steps={[
             { label: "", description: "", scrollHeight: "65vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },

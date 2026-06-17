@@ -18,6 +18,7 @@ type MultiSceneProps = {
   steps: Step[]
   topOffset?: number
   onReady?: (jumpToStep: (i: number) => void) => void
+  onScrollByReady?: (scrollBy: (amount: number) => void) => void
   onProgressReady?: (progress: MotionValue<number>) => void
 }
 
@@ -229,7 +230,7 @@ function StepLabel({
   )
 }
 
-export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: MultiSceneProps) {
+export function MultiScene({ steps, topOffset = 0, onReady, onScrollByReady, onProgressReady }: MultiSceneProps) {
   const vhs     = steps.map((s) => parseVh(s.scrollHeight))
   const totalVh = vhs.reduce((a, b) => a + b, 0)
 
@@ -325,7 +326,12 @@ export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: M
     progress.set(target)
   }
 
+  function scrollBy(amount: number) {
+    targetRef.current = Math.max(0, Math.min(1, targetRef.current + amount))
+  }
+
   useEffect(() => { onReady?.(jumpToStep) }, [])
+  useEffect(() => { onScrollByReady?.(scrollBy) }, [])
 
   const lastLabeledIndex = steps.reduce((acc, s, i) => s.label ? i : acc, -1)
 
