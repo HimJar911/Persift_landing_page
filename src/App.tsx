@@ -78,7 +78,7 @@ export default function App() {
 
       {/* scroll hint — desktop only */}
       <motion.div
-        onClick={() => scrollByRef.current?.(0.06)}
+        onClick={() => scrollByRef.current?.(0.042)}
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         style={{
