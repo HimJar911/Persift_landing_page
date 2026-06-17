@@ -47,6 +47,7 @@ export function LogoTicker() {
       padding: "18px 0",
       overflow: "hidden",
       position: "relative",
+      transform: "translateZ(0)",
     }}>
       {/* left fade */}
       <div style={{

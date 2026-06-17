@@ -11,6 +11,8 @@ export function MobileHero() {
       padding: "96px 24px 64px",
       gap: 28,
       textAlign: "center",
+      overflow: "hidden",
+      position: "relative",
     }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
         <h1 style={{
