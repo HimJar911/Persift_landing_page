@@ -90,6 +90,14 @@ export function Scene7Ask() {
       pointerEvents: "auto",
       overflow: "hidden",
     }}>
+      <div style={{
+        position: "absolute",
+        top: "40%", left: "50%",
+        width: 420, height: 420,
+        transform: "translate(-50%,-50%)",
+        background: "radial-gradient(circle, rgba(240,163,65,0.07) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
 
       <Wordmark height={32} />
 
