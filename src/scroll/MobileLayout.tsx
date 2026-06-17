@@ -472,7 +472,6 @@ const sectionStyle: React.CSSProperties = {
   alignItems: "center",
   justifyContent: "center",
   padding: "64px 0",
-  borderBottom: "1px solid rgba(240,163,65,0.06)",
 }
 
 const innerStyle: React.CSSProperties = {
