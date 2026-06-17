@@ -104,12 +104,13 @@ export default function App() {
           letterSpacing: "0.18em",
           textTransform: "uppercase",
           color: "rgba(243,236,225,0.35)",
+          textShadow: "0 0 12px rgba(0,0,0,0.8), 0 0 24px rgba(0,0,0,0.6)",
         }}>
           scroll
         </span>
 
         {/* chevrons */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, filter: "drop-shadow(0 0 6px rgba(0,0,0,0.9))" }}>
           {[0, 1, 2].map((i) => (
             <div
               key={i}
