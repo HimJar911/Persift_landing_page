@@ -40,24 +40,32 @@ export function PrivacyPolicy() {
 
         <Section title="What we collect">
           <Subsection title="Waitlist sign-up">
-            <p>When you sign up at persift.com we collect your <strong>email address</strong>. We do not collect your name or any other personal information at this stage.</p>
+            <p>When you sign up at persift.com we collect your <strong>email address</strong>. That is the only thing we ask for at this stage. We do not collect your name or anything else.</p>
           </Subsection>
-          <Subsection title="Extension usage (private beta)">
-            <p>Once you have access to the Persift extension, it reads job listing pages you visit (Ashby, Greenhouse, Lever) to identify fields and populate your application. The data used to fill applications — resume, name, contact details, and essay responses — is information you provide to Persift and is stored locally in your browser's extension storage.</p>
-            <p>Persift does not transmit your resume or application content to our servers. Job applications are submitted directly from your browser to the employer's ATS.</p>
+          <Subsection title="Account and profile (private beta)">
+            <p>When you set up Persift, you give us your name, contact details, university, the roles and locations you are targeting, your resume, and any saved answers to common application questions. We use this to match you to jobs and to prepare your applications.</p>
+          </Subsection>
+          <Subsection title="Job and application data (private beta)">
+            <p>The extension reads job listing pages you visit on supported platforms (Greenhouse, Ashby, and Lever) so it can identify the role and fill in the application. To score how well a role fits you and to tailor your resume and responses for that role, your resume and profile are processed on our servers. The application itself is submitted from your own browser through the extension, directly to the employer's ATS. We store a record of the applications Persift prepares and submits so you can see them on your dashboard.</p>
           </Subsection>
           <Subsection title="Usage analytics (private beta)">
-            <p>We may collect aggregate, anonymized usage metrics (e.g., number of applications submitted per session) to improve the product. These metrics are not linked to your identity.</p>
+            <p>We collect aggregate usage metrics, such as how many applications were submitted in a session, to improve the product. We keep these in a form that is not tied to your identity.</p>
           </Subsection>
         </Section>
 
         <Section title="How we use your data">
           <ul>
-            <li>To send you a confirmation email when you sign up.</li>
+            <li>To send you a confirmation email when you join the waitlist.</li>
             <li>To notify you when the private beta opens.</li>
-            <li>To prevent abuse (rate limiting by IP address).</li>
+            <li>To match you to roles and tailor your applications.</li>
+            <li>To show your prepared and submitted applications on your dashboard.</li>
+            <li>To prevent abuse, including rate limiting by IP address.</li>
           </ul>
-          <p>We do not use your email for marketing beyond the above. We do not sell your data to any third party.</p>
+          <p>We do not use your email for marketing beyond the messages above. We do not sell your data to anyone.</p>
+        </Section>
+
+        <Section title="Where your data is processed">
+          <p>Your resume and profile are sent to our servers and to our AI provider so we can score role fit and tailor your applications. We send only what is needed for that task. The completed application is filled in and submitted on your own device through the Chrome extension, so the actual submission goes straight from your browser to the employer.</p>
         </Section>
 
         <Section title="Third-party services">
@@ -72,6 +80,7 @@ export function PrivacyPolicy() {
                 <tr><td>LaunchList</td><td>Waitlist management</td><td>Email address</td></tr>
                 <tr><td>Upstash Redis</td><td>Rate limiting</td><td>Hashed IP</td></tr>
                 <tr><td>Vercel</td><td>Hosting and serverless functions</td><td>IP address, request metadata</td></tr>
+                <tr><td>Anthropic</td><td>Resume and application tailoring</td><td>Resume and profile content</td></tr>
               </tbody>
             </table>
           </div>
@@ -79,16 +88,21 @@ export function PrivacyPolicy() {
         </Section>
 
         <Section title="Data retention">
-          <p>Email addresses are retained until you request deletion or Persift is discontinued. Rate-limit records are automatically purged after 1 hour.</p>
+          <p>Email addresses are retained until you request deletion or Persift is discontinued. Profile, resume, and application records are kept while your account is active and are deleted within 30 days of you closing your account or asking us to remove your data. Rate-limit records are automatically purged after 1 hour.</p>
         </Section>
 
         <Section title="Your rights">
-          <p>You may request that we:</p>
+          <p>You can ask us to:</p>
           <ul>
-            <li>Delete your email from the waitlist and all associated records.</li>
-            <li>Confirm what data we hold about you.</li>
+            <li>Delete your email, profile, resume, and application history.</li>
+            <li>Tell you what data we hold about you.</li>
+            <li>Correct anything that is wrong.</li>
           </ul>
           <p>To exercise any of these rights, email us at <a href="mailto:himanshujar911@gmail.com">himanshujar911@gmail.com</a>. We will respond within 7 days.</p>
+        </Section>
+
+        <Section title="Security">
+          <p>We use reasonable measures to protect your data, including encrypted connections and access controls on our servers. No system is perfectly secure, so we cannot guarantee absolute security, but we work to keep your information safe and to limit what we collect in the first place.</p>
         </Section>
 
         <Section title="Cookies">
@@ -96,7 +110,7 @@ export function PrivacyPolicy() {
         </Section>
 
         <Section title="Children">
-          <p>Persift is not directed at children under 13. We do not knowingly collect personal information from anyone under 13.</p>
+          <p>Persift is not meant for anyone under 13, and we do not knowingly collect their information. If you believe a child has given us their data, email us and we will remove it.</p>
         </Section>
 
         <Section title="Changes to this policy">

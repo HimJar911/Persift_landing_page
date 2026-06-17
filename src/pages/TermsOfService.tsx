@@ -34,60 +34,78 @@ export function TermsOfService() {
         </h1>
 
         <Section title="Acceptance">
-          <p>By accessing persift.com or installing the Persift Chrome extension, you agree to be bound by these Terms of Service. If you do not agree, do not use Persift.</p>
+          <p>By accessing persift.com or installing the Persift Chrome extension, you agree to these Terms of Service. If you do not agree, do not use Persift.</p>
         </Section>
 
         <Section title="What Persift does">
-          <p>Persift is a Chrome extension that discovers early-career job listings on supported job boards and, with your explicit configuration, automatically fills and submits applications on your behalf. All application submissions are made in your name, using credentials and information you supply.</p>
-          <p><strong>You are responsible for the accuracy of all information you provide to Persift</strong>, including your resume, work history, and essay responses. Persift is a tool — the applications it submits are your applications.</p>
+          <p>Persift is a Chrome extension that finds early-career job listings on supported job boards and, based on how you set it up, fills and submits applications on your behalf. Every application is submitted in your name, using the information you give us.</p>
+          <p>You are responsible for everything you provide to Persift, including your resume, work history, and answers to application questions. Persift is a tool. The applications it sends are your applications, and you are responsible for what is in them.</p>
+        </Section>
+
+        <Section title="Eligibility">
+          <p>You must be at least 13 years old to use Persift. If you are using Persift to apply to jobs, you are also responsible for making sure you are legally allowed to work in the roles and locations you apply to. Persift does not check work authorization, visa status, or eligibility for any role.</p>
         </Section>
 
         <Section title="Permitted use">
           <ul>
             <li>You may use Persift only for your own personal job search.</li>
-            <li>You may not use Persift to submit applications on behalf of another person without their explicit consent.</li>
-            <li>You may not reverse-engineer, scrape, or attempt to extract proprietary logic from the extension.</li>
-            <li>You may not use Persift to apply to roles you are not eligible for or to which you do not intend to respond.</li>
+            <li>You may not use Persift to submit applications for another person without their clear consent.</li>
+            <li>You may not reverse engineer, scrape, or try to extract the proprietary logic of the extension.</li>
+            <li>You may not use Persift to apply to roles you are not eligible for or have no intention of responding to.</li>
+            <li>You may not use Persift in a way that breaks the terms of the job boards or employer systems it interacts with, or any applicable law.</li>
           </ul>
+        </Section>
+
+        <Section title="Your responsibility for submitted applications">
+          <p>Persift acts on your instructions. You decide which roles to target and what information to include, and you are responsible for reviewing your profile and resume before applications go out. We are not responsible for applications that are submitted with errors, sent to the wrong role, or based on outdated information you provided. If you want to stop Persift from applying on your behalf, you can pause it or uninstall the extension at any time.</p>
         </Section>
 
         <Section title="Waitlist">
-          <p>Joining the waitlist does not guarantee access to the private beta or the final product. We reserve the right to grant or revoke access at our discretion. We will not charge you at the waitlist stage.</p>
+          <p>Joining the waitlist does not guarantee access to the private beta or the final product. We may grant or revoke access at our discretion. We will not charge you at the waitlist stage.</p>
+        </Section>
+
+        <Section title="No professional advice">
+          <p>Persift does not provide career, legal, or employment advice. Match scores, tailored resumes, and suggested responses are generated automatically and may be wrong or incomplete. You should review everything before relying on it.</p>
         </Section>
 
         <Section title="Disclaimer of warranties">
-          <p>Persift is provided <strong>"as is"</strong> and <strong>"as available"</strong>, without warranty of any kind, express or implied. We do not warrant that:</p>
+          <p>Persift is provided <strong>"as is"</strong> and <strong>"as available"</strong>, without warranty of any kind, whether express or implied. We do not promise that:</p>
           <ul>
-            <li>Applications submitted via Persift will be received, processed, or reviewed by employers.</li>
-            <li>The service will be uninterrupted or error-free.</li>
-            <li>Job listings discovered by Persift are accurate, current, or still open.</li>
+            <li>Applications submitted through Persift will be received, processed, or reviewed by employers.</li>
+            <li>The service will run without interruptions or errors.</li>
+            <li>Job listings found by Persift are accurate, current, or still open.</li>
+            <li>The automated tailoring or match scoring will be accurate or suitable for any role.</li>
           </ul>
-          <p>Job applications are submitted to third-party employer systems (Ashby, Greenhouse, Lever) that we do not control. We are not responsible for how those systems handle your application data.</p>
+          <p>Applications are submitted to third-party employer systems (Ashby, Greenhouse, Lever) that we do not control. We are not responsible for how those systems receive, store, or handle your application data.</p>
         </Section>
 
         <Section title="Limitation of liability">
-          <p>To the fullest extent permitted by law, Persift and its founders shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of — or inability to use — the service, including but not limited to missed job opportunities, employer rejections, or data loss.</p>
-          <p>Our total liability for any claim arising from these Terms shall not exceed the amount you paid us in the 12 months preceding the claim (which, during the free beta, is $0).</p>
+          <p>To the fullest extent allowed by law, Persift and its founders are not liable for any indirect, incidental, special, or consequential damages that arise from your use of, or inability to use, the service. This includes but is not limited to missed job opportunities, employer rejections, applications that are not delivered, and data loss.</p>
+          <p>Our total liability for any claim arising from these Terms will not exceed the amount you paid us in the 12 months before the claim. During the free beta, that amount is $0.</p>
+        </Section>
+
+        <Section title="Service changes and availability">
+          <p>Persift is in active development. We may change, suspend, or discontinue any part of the service at any time, including features, supported job boards, or the product as a whole, with or without notice. We are not liable to you for doing so.</p>
         </Section>
 
         <Section title="Intellectual property">
-          <p>The Persift name, logo, and codebase are the intellectual property of Himanshu Jarodiya. You may not reproduce or distribute them without written permission.</p>
+          <p>The Persift name, logo, and codebase are the property of Himanshu Jarodiya. You may not copy, reproduce, or distribute them without written permission. Nothing in these Terms gives you any ownership of Persift.</p>
         </Section>
 
         <Section title="Termination">
-          <p>We may suspend or terminate your access to Persift at any time, with or without notice, if we believe you are violating these Terms or for any other reason at our sole discretion. You may stop using Persift at any time by uninstalling the extension.</p>
+          <p>We may suspend or end your access to Persift at any time, with or without notice, if we believe you are breaking these Terms or for any other reason at our discretion. You may stop using Persift at any time by uninstalling the extension. The sections on liability, disclaimers, and intellectual property continue to apply after your access ends.</p>
         </Section>
 
         <Section title="Changes to these terms">
-          <p>We may update these Terms as the product evolves. Continued use of Persift after changes are posted constitutes acceptance of the updated Terms. Material changes will be communicated via email where feasible.</p>
+          <p>We may update these Terms as the product changes. Continuing to use Persift after changes are posted means you accept the updated Terms. Where we can, we will tell you about material changes by email.</p>
         </Section>
 
         <Section title="Governing law">
-          <p>These Terms are governed by the laws of the State of Arizona, USA, without regard to conflict of law principles.</p>
+          <p>These Terms are governed by the laws of the State of Arizona, USA, without regard to its conflict of law rules. Any dispute arising from these Terms will be handled in the state or federal courts located in Arizona, and you agree to that jurisdiction.</p>
         </Section>
 
         <Section title="Contact">
-          <p>Questions? Email <a href="mailto:himanshujar911@gmail.com">himanshujar911@gmail.com</a>.</p>
+          <p>Questions about these Terms? Email <a href="mailto:himanshujar911@gmail.com">himanshujar911@gmail.com</a>.</p>
         </Section>
       </div>
 
