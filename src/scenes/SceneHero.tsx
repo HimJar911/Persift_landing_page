@@ -94,9 +94,12 @@ export function SceneHero() {
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.9cqw" }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "4.1cqw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
-                $ persift --start
+                Shift to Persift.
               </span>
             </div>
+            <p style={{ margin: "2.5cqw 0 0", fontFamily: "'Roboto Mono', monospace", fontSize: "1.8cqw", fontWeight: 400, color: "rgba(160,220,170,0.35)", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>
+              scroll to see how it works ↓
+            </p>
           </motion.div>
         </motion.div>
       </motion.div>
