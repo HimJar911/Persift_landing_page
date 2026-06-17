@@ -76,7 +76,9 @@ export default function App() {
 
       {/* scroll hint — desktop only */}
       <motion.div
-        onClick={() => window.dispatchEvent(new WheelEvent("wheel", { deltaY: 400, bubbles: true, cancelable: true }))}
+        onClick={() => window.dispatchEvent(new WheelEvent("wheel", { deltaY: 800, bubbles: true, cancelable: true }))}
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         style={{
           position: "fixed",
           bottom: 28,
@@ -90,12 +92,7 @@ export default function App() {
           gap: 8,
           pointerEvents: isMobile ? "none" : "auto",
           cursor: "pointer",
-          padding: "10px 18px",
-          borderRadius: 999,
-          background: "rgba(243,236,225,0.04)",
-          border: "1px solid rgba(243,236,225,0.1)",
         }}
-        whileHover={{ background: "rgba(243,236,225,0.08)", borderColor: "rgba(240,163,65,0.3)" }}
       >
         {/* "scroll" word */}
         <span style={{
@@ -104,7 +101,7 @@ export default function App() {
           fontWeight: 500,
           letterSpacing: "0.18em",
           textTransform: "uppercase",
-          color: "rgba(243,236,225,0.5)",
+          color: "rgba(243,236,225,0.35)",
         }}>
           scroll
         </span>
@@ -112,7 +109,7 @@ export default function App() {
         {/* chevrons */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0 }}>
           {[0, 1, 2].map((i) => (
-            <motion.div
+            <div
               key={i}
               style={{
                 width: 14,
@@ -122,8 +119,6 @@ export default function App() {
                 transform: "rotate(45deg)",
                 marginTop: i === 0 ? 0 : -7,
               }}
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
             />
           ))}
         </div>
