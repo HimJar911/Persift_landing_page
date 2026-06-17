@@ -441,26 +441,14 @@ function MobileAnalytics() {
   )
 }
 
-function MobileCta() {
-  return (
-    <section id="mobile-cta" style={{ ...sectionStyle, borderBottom: "none" }}>
-      <div style={innerStyle}>
-        {/* re-use Scene7Ask which is already static */}
-        <div style={{ width: "100%", maxWidth: 440 }}>
-          <LazyScene7Ask />
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // Lazy import to avoid circular dep issues — Scene7Ask is standalone
 import { Scene7Ask } from "../scenes/Scene7Ask"
-function LazyScene7Ask() {
+
+function MobileCta() {
   return (
-    <div style={{ width: "100%", height: "auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <section id="mobile-cta" style={{ width: "100%", padding: "64px 0" }}>
       <Scene7Ask />
-    </div>
+    </section>
   )
 }
 
