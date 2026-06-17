@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 
-const LAST_UPDATED = "June 14, 2026"
+const LAST_UPDATED = "June 17, 2026"
 
 export function PrivacyPolicy() {
   useEffect(() => {
@@ -88,7 +88,7 @@ export function PrivacyPolicy() {
             <li>Delete your email from the waitlist and all associated records.</li>
             <li>Confirm what data we hold about you.</li>
           </ul>
-          <p>To exercise any of these rights, email us at <a href="mailto:hjarodiy@asu.edu">hjarodiy@asu.edu</a>. We will respond within 7 days.</p>
+          <p>To exercise any of these rights, email us at <a href="mailto:himanshujar911@gmail.com">himanshujar911@gmail.com</a>. We will respond within 7 days.</p>
         </Section>
 
         <Section title="Cookies">
@@ -104,7 +104,7 @@ export function PrivacyPolicy() {
         </Section>
 
         <Section title="Contact">
-          <p>Questions about this policy? Email <a href="mailto:hjarodiy@asu.edu">hjarodiy@asu.edu</a>.</p>
+          <p>Questions about this policy? Email <a href="mailto:himanshujar911@gmail.com">himanshujar911@gmail.com</a>.</p>
         </Section>
       </div>
 

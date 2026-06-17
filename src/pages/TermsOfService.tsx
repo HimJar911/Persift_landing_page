@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 
-const LAST_UPDATED = "June 14, 2026"
+const LAST_UPDATED = "June 17, 2026"
 
 export function TermsOfService() {
   useEffect(() => {
@@ -87,7 +87,7 @@ export function TermsOfService() {
         </Section>
 
         <Section title="Contact">
-          <p>Questions? Email <a href="mailto:hjarodiy@asu.edu">hjarodiy@asu.edu</a>.</p>
+          <p>Questions? Email <a href="mailto:himanshujar911@gmail.com">himanshujar911@gmail.com</a>.</p>
         </Section>
       </div>
 
