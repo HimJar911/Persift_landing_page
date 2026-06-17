@@ -30,7 +30,7 @@ function parseVh(s: string): number {
 const FADE = 0.007
 
 // How much each normalized deltaY unit moves progress. Tune this to feel.
-const SENSITIVITY = 0.00008
+const SENSITIVITY = 0.0001
 
 function SlicedScene({
   children,

@@ -138,14 +138,14 @@ export default function App() {
           onScrollByReady={(fn) => { scrollByRef.current = fn }}
           onProgressReady={handleProgressReady}
           steps={[
-            { label: "", description: "", scrollHeight: "65vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },
-            { label: "Install",   description: "One click from the Chrome Web Store.",    scrollHeight: "120vh", noSlide: true, children: <Scene2Install /> },
-            { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "86vh", jumpOffset: 0.13, children: <Scene2Setup /> },
+            { label: "", description: "", scrollHeight: "45vh", fullBleed: true,  noSlide: true, children: <SceneHero /> },
+            { label: "Install",   description: "One click from the Chrome Web Store.",    scrollHeight: "90vh", noSlide: true, children: <Scene2Install /> },
+            { label: "Set up",    description: "Tell it what you're looking for. Once.",  scrollHeight: "60vh", jumpOffset: 0.13, children: <Scene2Setup /> },
             { label: "Discover",  description: "Finds roles before they hit LinkedIn.",   scrollHeight: "125vh", children: <Scene3Machine /> },
-            { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "150vh", children: <Scene4Overnight /> },
-            { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "100vh", children: <Scene5Morning /> },
-            { label: "Analytics", description: "See what's working.",                     scrollHeight: "100vh", children: <Scene6Analytics /> },
-            { label: "Launch",    description: "Stop applying. Start interviewing.",      scrollHeight: "150vh", children: <div id="section-cta" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Scene7Ask /></div> },
+            { label: "Autopilot", description: "Applies overnight while you're asleep.",  scrollHeight: "55vh", children: <Scene4Overnight /> },
+            { label: "Morning",   description: "Wake up to interviews.",                  scrollHeight: "33vh", children: <Scene5Morning /> },
+            { label: "Analytics", description: "See what's working.",                     scrollHeight: "25vh", children: <Scene6Analytics /> },
+            { label: "Launch",    description: "Stop applying. Start interviewing.",      scrollHeight: "50vh", children: <div id="section-cta" style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Scene7Ask /></div> },
           ]}
         />
       )}

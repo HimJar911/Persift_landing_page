@@ -91,9 +91,9 @@ function Logo({ name }: { name: string }) {
 
 function DiscoveryCard({ mv }: { mv: MotionValue<number> }) {
   // internal motion so the beat never feels frozen during its hold
-  const fitWidth = useTransform(mv, [0.06, 0.085], ["0%", "100%"], { clamp: true })
-  const matchOpacity = useTransform(mv, [0.075, 0.095], [0, 1])
-  const linkedinOpacity = useTransform(mv, [0.085, 0.105], [0, 1])
+  const fitWidth = useTransform(mv, [0.04, 0.19], ["0%", "100%"], { clamp: true })
+  const matchOpacity = useTransform(mv, [0.14, 0.19], [0, 1])
+  const linkedinOpacity = useTransform(mv, [0.17, 0.21], [0, 1])
 
   return (
     <div
@@ -597,10 +597,10 @@ export function Scene3Machine() {
   const isMobile = useIsMobile(900)
   const { containerRef, contentRef, scale: fitScale } = useFitScale(24)
 
-  const discoveryOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
-  const workOpacity = useTransform(p, [0.13, 0.18, 0.96, 1.0], [0, 1, 1, 0])
+  const discoveryOpacity = useTransform(p, [0, 0.04, 0.19, 0.25], [0, 1, 1, 0])
+  const workOpacity = useTransform(p, [0.23, 0.28, 0.96, 1.0], [0, 1, 1, 0])
 
-  const APPLY_START = 0.18
+  const APPLY_START = 0.38
   const APPLY_END = 1.0
 
   // only Stripe — single company slot
@@ -623,8 +623,8 @@ export function Scene3Machine() {
   const active = PIPELINE[0]
   const queue: Company[] = []
 
-  const discoveryHeaderOpacity = useTransform(p, [0, 0.04, 0.11, 0.16], [0, 1, 1, 0])
-  const tailoringHeaderOpacity = useTransform(p, [0.13, 0.18, 0.21, 0.25], [0, 1, 1, 0])
+  const discoveryHeaderOpacity = useTransform(p, [0, 0.04, 0.19, 0.25], [0, 1, 1, 0])
+  const tailoringHeaderOpacity = useTransform(p, [0.23, 0.28, 0.35, 0.40], [0, 1, 1, 0])
   const fillingHeaderOpacity   = useTransform(frac, [0.07, 0.12, 0.97, 1.0], [0, 1, 1, 0])
 
   return (
