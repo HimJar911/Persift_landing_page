@@ -75,19 +75,28 @@ export default function App() {
       </header>
 
       {/* scroll hint — desktop only */}
-      <motion.div style={{
-        position: "fixed",
-        bottom: 28,
-        left: "50%",
-        x: "-50%",
-        opacity: isMobile ? 0 : scrollHintOpacity,
-        zIndex: 100,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 8,
-        pointerEvents: "none",
-      }}>
+      <motion.div
+        onClick={() => window.dispatchEvent(new WheelEvent("wheel", { deltaY: 400, bubbles: true, cancelable: true }))}
+        style={{
+          position: "fixed",
+          bottom: 28,
+          left: "50%",
+          x: "-50%",
+          opacity: isMobile ? 0 : scrollHintOpacity,
+          zIndex: 100,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 8,
+          pointerEvents: isMobile ? "none" : "auto",
+          cursor: "pointer",
+          padding: "10px 18px",
+          borderRadius: 999,
+          background: "rgba(243,236,225,0.04)",
+          border: "1px solid rgba(243,236,225,0.1)",
+        }}
+        whileHover={{ background: "rgba(243,236,225,0.08)", borderColor: "rgba(240,163,65,0.3)" }}
+      >
         {/* "scroll" word */}
         <span style={{
           fontSize: 10,
@@ -95,7 +104,7 @@ export default function App() {
           fontWeight: 500,
           letterSpacing: "0.18em",
           textTransform: "uppercase",
-          color: "rgba(243,236,225,0.35)",
+          color: "rgba(243,236,225,0.5)",
         }}>
           scroll
         </span>
