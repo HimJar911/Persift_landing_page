@@ -76,7 +76,7 @@ export default function App() {
 
       {/* scroll hint — desktop only */}
       <motion.div
-        onClick={() => window.dispatchEvent(new WheelEvent("wheel", { deltaY: 800, bubbles: true, cancelable: true }))}
+        onClick={() => window.dispatchEvent(new WheelEvent("wheel", { deltaY: 2400, bubbles: true, cancelable: true }))}
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         style={{
