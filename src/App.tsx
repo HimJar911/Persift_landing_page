@@ -104,13 +104,13 @@ export default function App() {
           letterSpacing: "0.18em",
           textTransform: "uppercase",
           color: "rgba(243,236,225,0.35)",
-          textShadow: "0 0 12px rgba(0,0,0,0.8), 0 0 24px rgba(0,0,0,0.6)",
+          textShadow: "0 1px 0 rgba(0,0,0,0.9), 0 -1px 0 rgba(255,255,255,0.18)",
         }}>
           scroll
         </span>
 
         {/* chevrons */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, filter: "drop-shadow(0 0 6px rgba(0,0,0,0.9))" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, filter: "drop-shadow(0 1px 0px rgba(0,0,0,0.9)) drop-shadow(0 -1px 0px rgba(255,255,255,0.15))" }}>
           {[0, 1, 2].map((i) => (
             <div
               key={i}
