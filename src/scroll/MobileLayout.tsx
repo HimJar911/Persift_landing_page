@@ -552,7 +552,7 @@ function StaticSceneWrapper({ children, pinAt = 1 }: { children: React.ReactNode
 
 export function MobileLayout() {
   return (
-    <div style={{ background: "var(--bg)", paddingTop: 48 }}>
+    <div style={{ background: "var(--bg)", paddingTop: 48, overflowX: "hidden" }}>
       <MobileHero />
       <StaticSceneWrapper><MobileInstall /></StaticSceneWrapper>
       <StaticSceneWrapper><MobileSetup /></StaticSceneWrapper>
