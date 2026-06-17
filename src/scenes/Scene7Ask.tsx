@@ -88,6 +88,7 @@ export function Scene7Ask() {
       gap: 30,
       padding: "0 24px",
       pointerEvents: "auto",
+      overflow: "hidden",
     }}>
       <div style={{
         position: "absolute",
