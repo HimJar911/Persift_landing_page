@@ -94,7 +94,7 @@ export function SceneHero() {
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.9cqw" }}>
               <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "4.1cqw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
-                $ persift --start
+                Persift can change that.
               </span>
             </div>
           </motion.div>
