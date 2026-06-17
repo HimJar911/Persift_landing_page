@@ -334,8 +334,8 @@ export function MultiScene({ steps, topOffset = 0, onReady, onProgressReady }: M
       <div
         style={{
           position: "sticky",
-          top: topOffset,
-          height: `calc(100vh - ${topOffset}px)`,
+          top: 0,
+          height: "100vh",
           width: "100%",
           overflow: "hidden",
           background: "var(--bg)",
