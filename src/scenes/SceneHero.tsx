@@ -82,19 +82,74 @@ export function SceneHero() {
             opacity: copyOpacity,
             position: "absolute", inset: 0, zIndex: 4,
             display: "flex", flexDirection: "column",
-            alignItems: "flex-start", justifyContent: "center",
-            padding: "12% 14%",
+            alignItems: "flex-start", justifyContent: "space-between",
+            padding: "10% 12% 8%",
             pointerEvents: "none",
           }}>
-            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.55)", letterSpacing: "0.02em", lineHeight: 1.8, whiteSpace: "nowrap" }}>
-              $ status --job-search
-            </p>
-            <p style={{ margin: 0, fontFamily: "'Roboto Mono', monospace", fontSize: "2.2cqw", fontWeight: 400, color: "rgba(160,220,170,0.38)", letterSpacing: "0.02em", lineHeight: 1.8, marginBottom: "3.4cqw", whiteSpace: "nowrap" }}>
-              &gt; 247 applications. 0 replies. Tired yet?
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.9cqw" }}>
-              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "4.1cqw", fontWeight: 500, color: "#f0a341", letterSpacing: "0.01em", whiteSpace: "nowrap", textShadow: "0 0 12px rgba(240,163,65,0.6), 0 0 30px rgba(240,163,65,0.25)" }}>
-                $ persift --start
+            {/* product content — Gmail notification + stats */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "3cqw", width: "100%" }}>
+
+              {/* Gmail notification card */}
+              <div style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "1.2cqw",
+                padding: "3cqw 3.5cqw",
+                display: "flex", flexDirection: "column", gap: "1.2cqw",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "1.5cqw" }}>
+                  <div style={{
+                    width: "3.5cqw", height: "3.5cqw", borderRadius: "50%",
+                    background: "linear-gradient(135deg, #EA4335, #c5392e)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "1.8cqw", fontWeight: 700, color: "#fff", fontFamily: "Inter, sans-serif",
+                    flexShrink: 0,
+                  }}>G</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.2cqw" }}>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "1.8cqw", fontWeight: 600, color: "rgba(243,236,225,0.9)" }}>Gmail</span>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "1.5cqw", color: "rgba(243,236,225,0.4)" }}>just now</span>
+                  </div>
+                </div>
+                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "1.9cqw", fontWeight: 600, color: "rgba(243,236,225,0.95)", lineHeight: 1.3 }}>
+                  Interview Request · Stripe
+                </div>
+                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "1.65cqw", color: "rgba(243,236,225,0.5)", lineHeight: 1.4 }}>
+                  "We'd love to schedule a technical interview for the Software Engineer Intern role..."
+                </div>
+              </div>
+
+              {/* stats row */}
+              <div style={{ display: "flex", gap: "2cqw" }}>
+                {[
+                  { value: "8", label: "Applied" },
+                  { value: "3", label: "Responded" },
+                  { value: "1", label: "Interview" },
+                ].map(({ value, label }) => (
+                  <div key={label} style={{
+                    flex: 1,
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    borderRadius: "1cqw",
+                    padding: "2cqw",
+                    display: "flex", flexDirection: "column", gap: "0.5cqw",
+                  }}>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "3.5cqw", fontWeight: 700, color: label === "Interview" ? "#f0a341" : "rgba(243,236,225,0.9)" }}>{value}</span>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontSize: "1.5cqw", color: "rgba(243,236,225,0.4)" }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* website voice — clearly separate register */}
+            <div style={{ width: "100%", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2.5cqw", display: "flex", justifyContent: "center" }}>
+              <span style={{
+                fontFamily: "Fraunces, Georgia, serif",
+                fontStyle: "italic",
+                fontSize: "2.1cqw",
+                color: "rgba(240,163,65,0.7)",
+                letterSpacing: "0.01em",
+              }}>
+                Scroll to see how ↓
               </span>
             </div>
           </motion.div>
